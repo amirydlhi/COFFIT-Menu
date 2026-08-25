@@ -826,6 +826,47 @@ const ICONS = {
     <path d="M20 18h24l1 6H19l1-6z" fill="#1F3B2C"/>
     <path d="M24 24c3 3 3 5 0 8s-3 5 0 8 3 5 0 8" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8"/>
     <rect x="30" y="4" width="3" height="16" rx="1.5" fill="#8FB39A"/>
+  </svg>`,
+  mocktail: `<svg viewBox="0 0 64 64" fill="none">
+    <path d="M16 14h32l-13 20v18h-6V34L16 14z" fill="#DCEBE0"/>
+    <path d="M16 14h32l-2 4H18l-2-4z" fill="#1F3B2C"/>
+    <path d="M25 52h14v4a1.6 1.6 0 0 1-1.6 1.6H26.6A1.6 1.6 0 0 1 25 56v-4z" fill="#8FB39A"/>
+    <circle cx="27" cy="24" r="2" fill="#1F3B2C" opacity=".55"/>
+    <circle cx="34" cy="20" r="1.6" fill="#1F3B2C" opacity=".4"/>
+    <path d="M20 16c4 4 6 4 10 0" stroke="#F4EEDD" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  </svg>`,
+  syrup: `<svg viewBox="0 0 64 64" fill="none">
+    <rect x="24" y="10" width="10" height="8" rx="1.4" fill="#1F3B2C"/>
+    <path d="M22 18h14l2 6-3 4v22a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V28l-3-4 2-6z" fill="#DCEBE0"/>
+    <path d="M20.6 26h16.8" stroke="#1F3B2C" stroke-width="1.6" opacity=".7"/>
+    <rect x="22" y="34" width="14" height="14" rx="2" fill="#8FB39A" opacity=".85"/>
+  </svg>`,
+  cookie: `<svg viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="19" fill="#E7DCC5"/>
+    <circle cx="32" cy="32" r="19" stroke="#1F3B2C" stroke-width="1.4" opacity=".25"/>
+    <circle cx="25" cy="25" r="2.6" fill="#1F3B2C" opacity=".75"/>
+    <circle cx="39" cy="24" r="2.2" fill="#1F3B2C" opacity=".7"/>
+    <circle cx="41" cy="36" r="2.6" fill="#1F3B2C" opacity=".75"/>
+    <circle cx="28" cy="40" r="2" fill="#1F3B2C" opacity=".65"/>
+    <circle cx="33" cy="32" r="2.3" fill="#1F3B2C" opacity=".7"/>
+  </svg>`,
+  cake: `<svg viewBox="0 0 64 64" fill="none">
+    <path d="M32 12c-2 3-3 5-3 7a3 3 0 0 0 6 0c0-2-1-4-3-7z" fill="#8FB39A"/>
+    <path d="M14 30l18-8 18 8-18 8-18-8z" fill="#E7DCC5"/>
+    <path d="M14 30v14l18 8V38L14 30z" fill="#DCEBE0"/>
+    <path d="M50 30v14l-18 8V38l18-8z" fill="#1F3B2C" opacity=".85"/>
+  </svg>`,
+  topping: `<svg viewBox="0 0 64 64" fill="none">
+    <path d="M20 40c0-9 5.4-16 12-16s12 7 12 16" stroke="#1F3B2C" stroke-width="2" fill="#F4EEDD" opacity=".9"/>
+    <ellipse cx="32" cy="41" rx="16" ry="6" fill="#E7DCC5"/>
+    <path d="M20 41v6a4 4 0 0 0 4 4h16a4 4 0 0 0 4-4v-6" stroke="#8FB39A" stroke-width="2" fill="none"/>
+    <circle cx="32" cy="20" r="2" fill="#8FB39A"/>
+  </svg>`,
+  panini: `<svg viewBox="0 0 64 64" fill="none">
+    <path d="M12 24a6 6 0 0 1 6-6h28a6 6 0 0 1 6 6v2H12v-2z" fill="#1F3B2C"/>
+    <path d="M12 26h40l-2 8a6 6 0 0 1-6 5H20a6 6 0 0 1-6-5l-2-8z" fill="#E7DCC5"/>
+    <path d="M18 30c3 2 6 2 9 0s6-2 9 0 6 2 9 0" stroke="#8FB39A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M12 39a6 6 0 0 0 6 6h28a6 6 0 0 0 6-6" stroke="#1F3B2C" stroke-width="2" fill="none"/>
   </svg>`
 };
 
@@ -844,66 +885,205 @@ function mediaHtml(item, iconKey){
 /* ============ Menu data ============ */
 const MENU = [
   {
-    id:"drip", nameFa:"قهوه دمی", nameEn:"Filter Coffee", icon:"drip",
+    id:"espresso-hot", nameFa:"نوشیدنی گرم (اسپرسو)", nameEn:"Hot Espresso Drinks", icon:"hot",
     items:[
-      {n:"وی۶۰", en:"V60 Pour Over", d:"دم‌آوری دستی و شفاف؛ نوت‌های میوه‌ای و اسیدیته‌ی روشن.", p:329000, img:"images/v60-pour-over.jpg"},
-      {n:"کمکس", en:"Chemex", d:"طعمی تمیز و سبک با ته‌مزه‌ای طولانی و شیرین.", p:339000, img:"images/chemex.jpg"},
-      {n:"سایفون", en:"Siphon Brew", d:"دم‌آوری نمایشی با بافتی مخملی و رایحه‌ای قوی.", p:369000, img:"images/siphon-brew.jpg"},
+      {n:"اسپرسو (روبوستا ۲۰-۸۰)", en:"Espresso (Robusta 20-80)", d:"شات اسپرسو با ترکیب ۲۰٪ روبوستا و ۸۰٪ عربیکا؛ بادی پر و کرمای غلیظ.", p:279000, img:"images/espresso-robusta-20-80.jpg"},
+      {n:"اسپرسو (عربیکا ۱۰۰٪)", en:"Espresso (100% Arabica)", d:"شات اسپرسوی خالص عربیکا؛ اسیدیته‌ی متعادل و شیرینی طبیعی.", p:319000, img:"images/espresso-100-arabica.jpg"},
+      {n:"اسپرسو چرسو ۵۰-۵۰", en:"Espresso Cherso Blend 50-50", d:"ترکیب مساوی روبوستا و عربیکا؛ تعادل بین بادی و شیرینی.", p:289000, img:"images/espresso-cherso-blend-50-50.jpg"},
+      {n:"آمریکانو (روبوستا ۲۰-۸۰)", en:"Americano (Robusta 20-80)", d:"آمریکانوی ترکیبی روبوستا-عربیکا؛ تلخی متعادل و پرانرژی.", p:269000, img:"images/americano-robusta-20-80.jpg"},
+      {n:"آمریکانو (عربیکا ۱۰۰٪)", en:"Americano (100% Arabica)", d:"آمریکانوی تمام‌عربیکا؛ طعمی روشن‌تر و ملایم‌تر.", p:299000, img:"images/americano-100-arabica.jpg"},
+      {n:"لاته (روبوستا ۲۰-۸۰)", en:"Latte (Robusta 20-80)", d:"لاته با پایه‌ی ترکیبی؛ شیر بخارداده و کف نرم.", p:309000, img:"images/latte-robusta-20-80.jpg"},
+      {n:"لاته (عربیکا ۱۰۰٪)", en:"Latte (100% Arabica)", d:"لاته با اسپرسوی تمام‌عربیکا؛ طعمی لطیف‌تر.", p:339000, img:"images/latte-100-arabica.jpg"},
+      {n:"کاپوچینو (روبوستا ۲۰-۸۰)", en:"Cappuccino (Robusta 20-80)", d:"کاپوچینوی ترکیبی؛ تعادل کلاسیک بین اسپرسو، شیر و کف.", p:319000, img:"images/cappuccino-robusta-20-80.jpg"},
+      {n:"کاپوچینو (عربیکا ۱۰۰٪)", en:"Cappuccino (100% Arabica)", d:"کاپوچینوی تمام‌عربیکا؛ نرم‌تر و کمی شیرین‌تر.", p:349000, img:"images/cappuccino-100-arabica.jpg"},
+      {n:"موکا (روبوستا ۲۰-۸۰)", en:"Mocha (Robusta 20-80)", d:"موکای ترکیبی؛ اسپرسو، شکلات تلخ و شیر بخارداده.", p:339000, img:"images/mocha-robusta-20-80.jpg"},
+      {n:"موکا (عربیکا ۱۰۰٪)", en:"Mocha (100% Arabica)", d:"موکای تمام‌عربیکا؛ طعمی ملایم‌تر همراه شکلات.", p:369000, img:"images/mocha-100-arabica.jpg"},
+      {n:"کارامل ماکیاتو (روبوستا ۲۰-۸۰)", en:"Caramel Macchiato (Robusta 20-80)", d:"لایه‌های شیر، اسپرسوی ترکیبی و سس کارامل دست‌ساز.", p:349000, img:"images/caramel-macchiato-robusta-20-80.jpg"},
+      {n:"کارامل ماکیاتو (عربیکا ۱۰۰٪)", en:"Caramel Macchiato (100% Arabica)", d:"همون کارامل ماکیاتوی محبوب، با پایه‌ی تمام‌عربیکا.", p:379000, img:"images/caramel-macchiato-100-arabica.jpg"},
+      {n:"کورتادو (روبوستا ۲۰-۸۰)", en:"Cortado (Robusta 20-80)", d:"کورتادوی ترکیبی؛ اسپرسو و شیر گرم به نسبت مساوی.", p:299000, img:"images/cortado-robusta-20-80.jpg"},
+      {n:"کورتادو (عربیکا ۱۰۰٪)", en:"Cortado (100% Arabica)", d:"کورتادوی تمام‌عربیکا؛ فشرده و متعادل.", p:329000, img:"images/cortado-100-arabica.jpg"},
     ]
   },
   {
-    id:"espresso-hot", nameFa:"اسپرسو بیس", nameEn:"Espresso Drinks", icon:"hot",
+    id:"espresso-cold", nameFa:"نوشیدنی سرد (اسپرسو)", nameEn:"Cold Espresso Drinks", icon:"cold",
     items:[
-      {n:"کاپوچینو", en:"Cappuccino Medium", d:"کاپوچینو متوسط؛ ترکیبی متعادل از اسپرسو و بافت نرم شیر.", p:347000, img:"images/cappuccino-medium.jpg"},
-      {n:"آمریکانو", en:"Americano Medium", d:"آمریکانو متوسط؛ ترکیبی از اسپرسو و آبجوش، تلخی ملایم.", p:297000, img:"images/americano-medium.jpg"},
-      {n:"موکا", en:"Mocha", d:"اسپرسو، شکلات تلخ و شیر بخارداده؛ شیرین و پرانرژی.", p:369000, img:"images/mocha.jpg"},
-      {n:"سینگل اورجین", en:"Single Origin Espresso", d:"اسپرسویی از یک مزرعه مشخص؛ پروفایل طعمی خاص و تمیز.", p:319000, img:"images/single-origin-espresso.jpg"},
-      {n:"لاته", en:"Latte", d:"اسپرسو با شیر بخارداده‌ی فراوان و کف نازک و ابریشمی.", p:337000, img:"images/latte.jpg"},
-      {n:"کارامل ماکیاتو", en:"Caramel Macchiato", d:"لایه‌های شیر، اسپرسو و سس کارامل دست‌ساز.", p:379000, img:"images/caramel-macchiato.jpg"},
-      {n:"اسپرسو روبوستا", en:"Robusta Blend Espresso", d:"بادی سنگین‌تر و کافئین بالاتر؛ تلخی پررنگ و ماندگار.", p:279000, img:"images/robusta-blend-espresso.jpg"},
-      {n:"اسپرسو عربیکا ۱۰۰٪", en:"100% Arabica Espresso", d:"شات خالص عربیکا؛ اسیدیته‌ی متعادل و شیرینی طبیعی.", p:309000, img:"images/100-arabica-espresso.jpg"},
-      {n:"اسپرسو روبوستا ۱۰۰٪", en:"100% Robusta Espresso", d:"غلظت و کرمای بالا؛ انتخاب طرفداران قهوه‌ی تلخ.", p:289000, img:"images/100-robusta-espresso.jpg"},
-    ]
-  },
-  {
-    id:"espresso-cold", nameFa:"قهوه سرد", nameEn:"Cold Coffee", icon:"cold",
-    items:[
-      {n:"آیس آمریکانو", en:"Iced Americano", d:"آیس آمریکانو؛ نسخه‌ی خنک قهوه با طعم برجسته و تازه.", p:297000, img:"images/iced-americano.jpg"},
-      {n:"آیس لاته", en:"Iced Latte", d:"اسپرسو روی یخ با شیر سرد و بافتی روان.", p:339000, img:"images/iced-latte.jpg"},
-      {n:"آیس موکا", en:"Iced Mocha", d:"آیس موکا؛ نسخه‌ی خنک قهوه با طعم برجسته و حس تازگی.", p:397000, img:"images/iced-mocha.jpg"},
-      {n:"آیس کارامل ماکیاتو", en:"Iced Caramel Macchiato", d:"شیر سرد، اسپرسو و کارامل؛ خنک و شیرین.", p:389000, img:"images/iced-caramel-macchiato.jpg"},
-      {n:"آفوگاتو", en:"Affogato", d:"یک شات اسپرسوی داغ روی بستنی وانیلی خنک.", p:349000, img:"images/affogato.jpg"},
-    ]
-  },
-  {
-    id:"infusion", nameFa:"دمنوش", nameEn:"Herbal Tea", icon:"tea",
-    items:[
-      {n:"چای سیاه", en:"Black Tea", d:"دمی پررنگ و کلاسیک، همراه با لیمو یا شکر به سلیقه.", p:189000, img:"images/black-tea.jpg"},
-      {n:"چای سبز", en:"Green Tea", d:"دمی سبک و گیاهی، مناسب تمام ساعات روز.", p:199000, img:"images/green-tea.jpg"},
-      {n:"چای ترش", en:"Sour Tea", d:"دمنوش ترش سنتی؛ خنک‌کننده و طراوت‌بخش.", p:209000, img:"images/sour-tea.jpg"},
-      {n:"دمنوش آرامش", en:"Calm Herbal Blend", d:"ترکیبی از گیاهان آرام‌بخش برای پایان روزی آرام.", p:219000, img:"images/calm-herbal-blend.jpg"},
+      {n:"آیس آمریکانو (روبوستا ۲۰-۸۰)", en:"Iced Americano (Robusta 20-80)", d:"آیس آمریکانوی ترکیبی؛ خنک، تلخی متعادل.", p:269000, img:"images/iced-americano-robusta-20-80.jpg"},
+      {n:"آیس آمریکانو (عربیکا ۱۰۰٪)", en:"Iced Americano (100% Arabica)", d:"آیس آمریکانوی تمام‌عربیکا؛ طعمی روشن‌تر.", p:299000, img:"images/iced-americano-100-arabica.jpg"},
+      {n:"آیس لاته (روبوستا ۲۰-۸۰)", en:"Iced Latte (Robusta 20-80)", d:"آیس لاته با پایه‌ی ترکیبی؛ شیر سرد و بافت روان.", p:319000, img:"images/iced-latte-robusta-20-80.jpg"},
+      {n:"آیس لاته (عربیکا ۱۰۰٪)", en:"Iced Latte (100% Arabica)", d:"آیس لاته با اسپرسوی تمام‌عربیکا؛ نرم‌تر و لطیف.", p:349000, img:"images/iced-latte-100-arabica.jpg"},
+      {n:"آیس کارامل ماکیاتو (روبوستا ۲۰-۸۰)", en:"Iced Caramel Macchiato (Robusta 20-80)", d:"شیر سرد، اسپرسوی ترکیبی و کارامل؛ خنک و شیرین.", p:359000, img:"images/iced-caramel-macchiato-robusta-20-80.jpg"},
+      {n:"آیس کارامل ماکیاتو (عربیکا ۱۰۰٪)", en:"Iced Caramel Macchiato (100% Arabica)", d:"همون آیس کارامل ماکیاتو، با پایه‌ی تمام‌عربیکا.", p:389000, img:"images/iced-caramel-macchiato-100-arabica.jpg"},
+      {n:"آفوگاتو (روبوستا ۲۰-۸۰)", en:"Affogato (Robusta 20-80)", d:"شات اسپرسوی ترکیبی روی بستنی وانیلی خنک.", p:329000, img:"images/affogato-robusta-20-80.jpg"},
+      {n:"آفوگاتو (عربیکا ۱۰۰٪)", en:"Affogato (100% Arabica)", d:"شات اسپرسوی تمام‌عربیکا روی بستنی وانیلی.", p:359000, img:"images/affogato-100-arabica.jpg"},
+      {n:"آیس موکا (روبوستا ۲۰-۸۰)", en:"Iced Mocha (Robusta 20-80)", d:"آیس موکای ترکیبی؛ شکلات تلخ، شیر سرد و اسپرسو.", p:369000, img:"images/iced-mocha-robusta-20-80.jpg"},
+      {n:"آیس موکا (عربیکا ۱۰۰٪)", en:"Iced Mocha (100% Arabica)", d:"آیس موکای تمام‌عربیکا؛ طعمی ملایم‌تر.", p:397000, img:"images/iced-mocha-100-arabica.jpg"},
     ]
   },
   {
     id:"hot-drinks", nameFa:"نوشیدنی گرم", nameEn:"Hot Beverages", icon:"milk",
     items:[
-      {n:"شیر گرم", en:"Warm Milk", d:"شیر تمام‌چرب بخارداده، ساده و آرامش‌بخش.", p:179000, img:"images/warm-milk.jpg"},
       {n:"هات چاکلت", en:"Hot Chocolate", d:"شکلات تلخ ذوب‌شده در شیر داغ؛ غلیظ و مخملی.", p:279000, img:"images/hot-chocolate.jpg"},
-      {n:"شیر نسکافه", en:"Nescafé Milk", d:"شیر داغ با نسکافه؛ ساده، شیرین و آشنا.", p:239000, img:"images/nescaf-milk.jpg"},
-      {n:"دبل چاکلت", en:"Double Chocolate", d:"دو لایه شکلات شیری و تلخ در شیر داغ.", p:299000, img:"images/double-chocolate.jpg"},
+      {n:"کاپوچینو فوری", en:"Instant Cappuccino", d:"کاپوچینوی فوری با کف نرم؛ سریع و آشنا.", p:219000, img:"images/instant-cappuccino.jpg"},
       {n:"ماسالا", en:"Masala Chai", d:"چای هندی با ادویه‌جات گرم؛ دارچین، هل و زنجبیل.", p:249000, img:"images/masala-chai.jpg"},
+      {n:"دبل چاکلت", en:"Double Chocolate", d:"دو لایه شکلات شیری و تلخ در شیر داغ.", p:299000, img:"images/double-chocolate.jpg"},
+      {n:"وایت چاکلت", en:"White Chocolate", d:"شکلات سفید ذوب‌شده در شیر داغ؛ شیرین و کرمی.", p:289000, img:"images/white-chocolate.jpg"},
+      {n:"شیر نسکافه", en:"Nescafé Milk", d:"شیر داغ با نسکافه؛ ساده، شیرین و آشنا.", p:239000, img:"images/nescaf-milk.jpg"},
       {n:"شیر کاکائو", en:"Cocoa Milk", d:"شیر داغ با کاکائوی خالص، ملایم و شیرین.", p:229000, img:"images/cocoa-milk.jpg"},
+      {n:"شیر لوتوس", en:"Lotus Milk", d:"شیر داغ با طعم بیسکوییت لوتوس؛ کاراملی و دلچسب.", p:289000, img:"images/lotus-milk.jpg"},
+      {n:"شیر نوتلا", en:"Nutella Milk", d:"شیر داغ با نوتلا؛ شیرین و فندقی.", p:299000, img:"images/nutella-milk.jpg"},
+      {n:"چای کرک", en:"Kurdish Tea", d:"دمی پررنگ به سبک چای کرکی؛ قوی و خوش‌رنگ.", p:199000, img:"images/kurdish-tea.jpg"},
+      {n:"شیر عسل دارچین", en:"Honey Cinnamon Milk", d:"شیر گرم با عسل طبیعی و دارچین؛ آرامش‌بخش.", p:239000, img:"images/honey-cinnamon-milk.jpg"},
+      {n:"شیر گرم", en:"Warm Milk", d:"شیر تمام‌چرب بخارداده، ساده و آرامش‌بخش.", p:179000, img:"images/warm-milk.jpg"},
+      {n:"ماچا لاته", en:"Matcha Latte", d:"پودر ماچای ژاپنی با شیر بخارداده؛ گیاهی و خاص.", p:319000, img:"images/matcha-latte.jpg"},
+      {n:"شیر پسته زعفرون", en:"Pistachio Saffron Milk", d:"شیر گرم با طعم پسته و زعفران؛ لوکس و ایرانی.", p:339000, img:"images/pistachio-saffron-milk.jpg"},
+      {n:"شیر نسکافه شکلات", en:"Nescafé Chocolate Milk", d:"ترکیب نسکافه و شکلات در شیر داغ.", p:269000, img:"images/nescaf-chocolate-milk.jpg"},
     ]
   },
   {
-    id:"shake", nameFa:"شیک", nameEn:"Milkshakes", icon:"shake",
+    id:"drip", nameFa:"قهوه دمی", nameEn:"Filter Coffee", icon:"drip",
     items:[
-      {n:"شیک وانیل", en:"Vanilla Shake", d:"بستنی وانیل و شیر یخ‌زده؛ کلاسیک و خنک.", p:299000, img:"images/vanilla-shake.jpg"},
-      {n:"شیک شکلات", en:"Chocolate Shake", d:"بستنی شکلاتی غلیظ با تاپینگ شکلات.", p:309000, img:"images/chocolate-shake.jpg"},
-      {n:"شیک نسکافه", en:"Nescafé Shake", d:"طعم قهوه در بافتی یخی و کرمی.", p:319000, img:"images/nescaf-shake.jpg"},
-      {n:"شیک توت‌فرنگی", en:"Strawberry Shake", d:"توت‌فرنگی تازه با بستنی وانیل؛ میوه‌ای و رنگارنگ.", p:319000, img:"images/strawberry-shake.jpg"},
-      {n:"شیک نوتلا", en:"Nutella Shake", d:"نوتلا و بستنی؛ شیرین، فندقی و لوکس.", p:339000, img:"images/nutella-shake.jpg"},
-      {n:"شیک لوتوس", en:"Lotus Shake", d:"بیسکوییت لوتوس و بستنی؛ کاراملی و دلچسب.", p:339000, img:"images/lotus-shake.jpg"},
+      {n:"وی۶۰", en:"V60 Pour Over", d:"دم‌آوری دستی و شفاف؛ نوت‌های میوه‌ای و اسیدیته‌ی روشن.", p:329000, img:"images/v60-pour-over.jpg"},
+      {n:"اسپروت آیریش", en:"Sprout Irish", d:"دم‌آوری ویژه با طعمی گرم و کمی ادویه‌ای، الهام‌گرفته از قهوه‌ی ایرلندی.", p:339000, img:"images/sprout-irish.jpg"},
+      {n:"اسپروت کافی کولا", en:"Sprout Coffee Cola", d:"ترکیب خاص قهوه‌ی دمی با نت‌های شیرین شبیه به کولا.", p:329000, img:"images/sprout-coffee-cola.jpg"},
+      {n:"اسپروت کلاسیک", en:"Sprout Classic", d:"دم‌آوری کلاسیک با طعمی متعادل و تمیز.", p:319000, img:"images/sprout-classic.jpg"},
+      {n:"کمکس", en:"Chemex", d:"طعمی تمیز و سبک با ته‌مزه‌ای طولانی و شیرین.", p:339000, img:"images/chemex.jpg"},
+      {n:"سایفون", en:"Siphon Brew", d:"دم‌آوری نمایشی با بافتی مخملی و رایحه‌ای قوی.", p:369000, img:"images/siphon-brew.jpg"},
+    ]
+  },
+  {
+    id:"tea", nameFa:"چای و دمنوش", nameEn:"Tea & Herbal", icon:"tea",
+    items:[
+      {n:"چای سیاه", en:"Black Tea", d:"دمی پررنگ و کلاسیک، همراه با لیمو یا شکر به سلیقه.", p:189000, img:"images/black-tea.jpg"},
+      {n:"چای سبز", en:"Green Tea", d:"دمی سبک و گیاهی، مناسب تمام ساعات روز.", p:199000, img:"images/green-tea.jpg"},
+      {n:"چای ترش", en:"Sour Tea", d:"دمنوش ترش سنتی؛ خنک‌کننده و طراوت‌بخش.", p:209000, img:"images/sour-tea.jpg"},
+      {n:"دمنوش آرامش", en:"Calm Herbal Blend", d:"ترکیبی از گیاهان آرام‌بخش برای پایان روزی آرام.", p:219000, img:"images/calm-herbal-blend.jpg"},
+      {n:"دمنوش سرماخوردگی", en:"Cold Relief Herbal Blend", d:"ترکیب گیاهی گرم‌کننده، مناسب روزهای سرماخوردگی.", p:219000, img:"images/cold-relief-herbal-blend.jpg"},
+      {n:"چای زعفران", en:"Saffron Tea", d:"دم کرده‌ی چای با زعفران خالص؛ رنگ و عطر ایرانی.", p:249000, img:"images/saffron-tea.jpg"},
+    ]
+  },
+  {
+    id:"cold-drinks", nameFa:"نوشیدنی سرد", nameEn:"Cold Beverages", icon:"cold",
+    items:[
+      {n:"آیس کاپوفوری", en:"Iced Instant Cappuccino", d:"نسخه‌ی خنک کاپوچینوی فوری؛ سریع و رفرش‌کننده.", p:259000, img:"images/iced-instant-cappuccino.jpg"},
+      {n:"آیس چاکلت", en:"Iced Chocolate", d:"شکلات سرد و خنک؛ غلیظ و دلچسب.", p:289000, img:"images/iced-chocolate.jpg"},
+      {n:"آیس چاکلت فندوق", en:"Iced Hazelnut Chocolate", d:"شکلات سرد با طعم فندق؛ خنک و مغزدار.", p:309000, img:"images/iced-hazelnut-chocolate.jpg"},
+    ]
+  },
+  {
+    id:"hot-diet", nameFa:"نوشیدنی گرم رژیمی", nameEn:"Diet Hot Drinks", icon:"milk",
+    items:[
+      {n:"کاپوچینو رژیمی", en:"Diet Cappuccino", d:"کاپوچینوی کم‌کالری با شیر کم‌چرب.", p:259000, img:"images/diet-cappuccino.jpg"},
+      {n:"هات چاکلت رژیمی", en:"Diet Hot Chocolate", d:"هات چاکلت با شیرین‌کننده‌ی رژیمی، بدون شکر افزوده.", p:269000, img:"images/diet-hot-chocolate.jpg"},
+      {n:"شیر کاکائو رژیمی", en:"Diet Cocoa Milk", d:"شیر کاکائوی کم‌کالری با شیرین‌کننده‌ی طبیعی.", p:229000, img:"images/diet-cocoa-milk.jpg"},
+      {n:"موکا رژیمی دبل", en:"Diet Double Mocha", d:"موکای رژیمی با دو شات اسپرسو؛ کم‌کالری و پرانرژی.", p:299000, img:"images/diet-double-mocha.jpg"},
+      {n:"موکا رژیمی سینگل", en:"Diet Single Mocha", d:"موکای رژیمی با یک شات اسپرسو؛ ملایم‌تر.", p:279000, img:"images/diet-single-mocha.jpg"},
+      {n:"شیر نسکافه رژیمی", en:"Diet Nescafé Milk", d:"شیر نسکافه‌ی کم‌کالری، بدون شکر افزوده.", p:239000, img:"images/diet-nescaf-milk.jpg"},
+    ]
+  },
+  {
+    id:"cold-diet", nameFa:"نوشیدنی سرد رژیمی", nameEn:"Diet Cold Drinks", icon:"cold",
+    items:[
+      {n:"آیس کاپوچینو رژیمی", en:"Diet Iced Cappuccino", d:"نسخه‌ی خنک و کم‌کالری کاپوچینو.", p:279000, img:"images/diet-iced-cappuccino.jpg"},
+      {n:"آیس چاکلت رژیمی", en:"Diet Iced Chocolate", d:"شکلات سرد رژیمی؛ بدون شکر افزوده.", p:289000, img:"images/diet-iced-chocolate.jpg"},
+      {n:"لیموناد رژیمی", en:"Diet Lemonade", d:"لیموناد خنک با شیرین‌کننده‌ی رژیمی.", p:229000, img:"images/diet-lemonade.jpg"},
+      {n:"لیموناد زعفرون رژیمی", en:"Diet Saffron Lemonade", d:"لیموناد رژیمی با عطر زعفران؛ خاص و خنک.", p:249000, img:"images/diet-saffron-lemonade.jpg"},
+      {n:"موهیتو رژیمی", en:"Diet Mojito", d:"موهیتوی بدون الکل و کم‌کالری؛ نعنا و لیمو تازه.", p:259000, img:"images/diet-mojito.jpg"},
+    ]
+  },
+  {
+    id:"mocktail", nameFa:"ماکتیل‌ها", nameEn:"Mocktails", icon:"mocktail",
+    items:[
+      {n:"آیس هالووین", en:"Ice Halloween", d:"ماکتیل رنگارنگ و خنک با طعمی میوه‌ای غافلگیرکننده.", p:289000, img:"images/ice-halloween.jpg"},
+      {n:"دریم گلکسی", en:"Dream Galaxy", d:"ماکتیل چندلایه با گرادیان رنگی الهام‌گرفته از کهکشان.", p:309000, img:"images/dream-galaxy.jpg"},
+      {n:"ماکتیل بارتندر", en:"Bartender's Mocktail", d:"ترکیب ویژه‌ی بارمن؛ تازه، ترش و شیرین.", p:299000, img:"images/bartender-s-mocktail.jpg"},
+    ]
+  },
+  {
+    id:"smoothie", nameFa:"اسموتی", nameEn:"Smoothies", icon:"shake",
+    items:[
+      {n:"اسموتی انبه", en:"Mango Smoothie", d:"اسموتی خامه‌ای با انبه‌ی تازه؛ شیرین و تروپیکال.", p:279000, img:"images/mango-smoothie.jpg"},
+      {n:"اسموتی شاه توت", en:"Blackberry Smoothie", d:"اسموتی غلیظ با طعم شاه‌توت؛ ترش و شیرین.", p:289000, img:"images/blackberry-smoothie.jpg"},
+      {n:"اسموتی توت فرنگی", en:"Strawberry Smoothie", d:"اسموتی خنک با توت‌فرنگی تازه.", p:279000, img:"images/strawberry-smoothie.jpg"},
+    ]
+  },
+  {
+    id:"milkshake", nameFa:"میلک شیک", nameEn:"Milkshakes", icon:"shake",
+    items:[
+      {n:"شیک موز شکلات", en:"Banana Chocolate Shake", d:"بستنی، موز تازه و شکلات؛ غلیظ و پرانرژی.", p:309000, img:"images/banana-chocolate-shake.jpg"},
+      {n:"شیک نسکافه", en:"Nescafé Shake", d:"طعم قهوه در بافتی یخی و کرمی.", p:299000, img:"images/nescaf-shake.jpg"},
+      {n:"شیک وانیل", en:"Vanilla Shake", d:"بستنی وانیل و شیر یخ‌زده؛ کلاسیک و خنک.", p:289000, img:"images/vanilla-shake.jpg"},
+      {n:"شیک توت فرنگی", en:"Strawberry Shake", d:"توت‌فرنگی تازه با بستنی وانیل؛ میوه‌ای و رنگارنگ.", p:299000, img:"images/strawberry-shake.jpg"},
+      {n:"شیک بادام زمینی", en:"Peanut Butter Shake", d:"کره‌بادام‌زمینی و بستنی؛ غلیظ و مغزدار.", p:319000, img:"images/peanut-butter-shake.jpg"},
+    ]
+  },
+  {
+    id:"syrup", nameFa:"شات سیروپ", nameEn:"Syrup Shots", icon:"syrup",
+    items:[
+      {n:"شات سیروپ کارامل", en:"Caramel Syrup Shot", d:"یک شات سیروپ کارامل برای اضافه کردن به هر نوشیدنی.", p:39000, img:"images/caramel-syrup-shot.jpg"},
+      {n:"شات سیروپ وانیل", en:"Vanilla Syrup Shot", d:"یک شات سیروپ وانیل برای شیرین و خوش‌عطر کردن نوشیدنی.", p:39000, img:"images/vanilla-syrup-shot.jpg"},
+      {n:"شات سیروپ فندوق", en:"Hazelnut Syrup Shot", d:"یک شات سیروپ فندق برای طعم‌دار کردن نوشیدنی.", p:39000, img:"images/hazelnut-syrup-shot.jpg"},
+      {n:"شات سیروپ شکلات", en:"Chocolate Syrup Shot", d:"یک شات سیروپ شکلات برای غلیظ‌تر شدن نوشیدنی.", p:39000, img:"images/chocolate-syrup-shot.jpg"},
+      {n:"شات سیروپ آیریش", en:"Irish Syrup Shot", d:"یک شات سیروپ با طعم آیریش کریم.", p:42000, img:"images/irish-syrup-shot.jpg"},
+      {n:"شات سیروپ نارگیل", en:"Coconut Syrup Shot", d:"یک شات سیروپ نارگیل؛ تروپیکال و خوش‌عطر.", p:39000, img:"images/coconut-syrup-shot.jpg"},
+      {n:"شات سیروپ بلو کاراسائو", en:"Blue Curacao Syrup Shot", d:"یک شات سیروپ آبی با طعم مرکبات.", p:42000, img:"images/blue-curacao-syrup-shot.jpg"},
+      {n:"شات سیروپ انبه", en:"Mango Syrup Shot", d:"یک شات سیروپ انبه؛ میوه‌ای و شیرین.", p:39000, img:"images/mango-syrup-shot.jpg"},
+      {n:"شات سیروپ توت فرنگی", en:"Strawberry Syrup Shot", d:"یک شات سیروپ توت‌فرنگی.", p:39000, img:"images/strawberry-syrup-shot.jpg"},
+      {n:"شات سیروپ پشن فروت", en:"Passion Fruit Syrup Shot", d:"یک شات سیروپ پشن‌فروت؛ ترش و معطر.", p:42000, img:"images/passion-fruit-syrup-shot.jpg"},
+      {n:"شات سیروپ رز", en:"Rose Syrup Shot", d:"یک شات سیروپ گلاب و رز؛ عطر ایرانی.", p:42000, img:"images/rose-syrup-shot.jpg"},
+    ]
+  },
+  {
+    id:"cookie", nameFa:"کوکی‌های رژیمی", nameEn:"Diet Cookies", icon:"cookie",
+    items:[
+      {n:"کوکی شکلاتی", en:"Chocolate Cookie", d:"کوکی خانگی با تکه‌های شکلات تلخ؛ ترد و نرم.", p:139000, img:"images/chocolate-cookie.jpg"},
+      {n:"کوکی بلوبری", en:"Blueberry Cookie", d:"کوکی نرم با طعم بلوبری تازه.", p:149000, img:"images/blueberry-cookie.jpg"},
+      {n:"کوکی سوهان", en:"Sohan Cookie", d:"کوکی با طعم سوهان اصفهانی؛ زعفرانی و کاراملی.", p:159000, img:"images/sohan-cookie.jpg"},
+      {n:"کوکی پسته", en:"Pistachio Cookie", d:"کوکی مغزدار با پسته‌ی خرد شده.", p:159000, img:"images/pistachio-cookie.jpg"},
+      {n:"کوکی بادام زمینی", en:"Peanut Butter Cookie", d:"کوکی غنی با کره‌بادام‌زمینی.", p:149000, img:"images/peanut-butter-cookie.jpg"},
+      {n:"کوکی نارگیل", en:"Coconut Cookie", d:"کوکی با براده‌های نارگیل؛ ترد و خوش‌عطر.", p:139000, img:"images/coconut-cookie.jpg"},
+      {n:"کوکی تیرامیسو", en:"Tiramisu Cookie", d:"کوکی با طعم قهوه و ماسکارپونه.", p:159000, img:"images/tiramisu-cookie.jpg"},
+      {n:"کوکی هویج گردو", en:"Carrot Walnut Cookie", d:"کوکی نرم با هویج و گردو؛ کمی سالم‌تر و مغزدار.", p:149000, img:"images/carrot-walnut-cookie.jpg"},
+      {n:"کوکی شکلاتی با مغز کرم پروتئین", en:"Chocolate Protein Cream Cookie", d:"کوکی شکلاتی با مغز کرم پروتئین؛ مناسب بعد از تمرین.", p:169000, img:"images/chocolate-protein-cream-cookie.jpg"},
+      {n:"کوکی انجیر", en:"Fig Cookie", d:"کوکی نرم با تکه‌های انجیر خشک.", p:149000, img:"images/fig-cookie.jpg"},
+      {n:"کوکی نیویورکی", en:"New York Cookie", d:"کوکی ضخیم به سبک نیویورکی؛ مغزدار و نرم در وسط.", p:169000, img:"images/new-york-cookie.jpg"},
+    ]
+  },
+  {
+    id:"cake", nameFa:"کیک‌ها", nameEn:"Cakes", icon:"cake",
+    items:[
+      {n:"کیک دبل چاکلت", en:"Double Chocolate Cake", d:"کیک مرطوب با دو لایه شکلات تلخ و شیری.", p:269000, img:"images/double-chocolate-cake.jpg"},
+      {n:"کیک سه شیر", en:"Tres Leches Cake", d:"کیک اسفنجی خیس‌خورده در سه نوع شیر؛ نرم و شیرین.", p:279000, img:"images/tres-leches-cake.jpg"},
+      {n:"چیز کیک پسته", en:"Pistachio Cheesecake", d:"چیزکیک خامه‌ای با تاپینگ پسته.", p:299000, img:"images/pistachio-cheesecake.jpg"},
+      {n:"چیز کیک شاه توت", en:"Blackberry Cheesecake", d:"چیزکیک با سس شاه‌توت؛ ترش و شیرین.", p:289000, img:"images/blackberry-cheesecake.jpg"},
+      {n:"چیز کیک نوتلا", en:"Nutella Cheesecake", d:"چیزکیک با لایه‌ی نوتلا؛ شکلاتی و فندقی.", p:299000, img:"images/nutella-cheesecake.jpg"},
+      {n:"چیز کیک سن سباستین", en:"San Sebastian Cheesecake", d:"چیزکیک باسک با رویه‌ی کاراملی‌شده.", p:309000, img:"images/san-sebastian-cheesecake.jpg"},
+      {n:"تیرامیسو", en:"Tiramisu", d:"دسر ایتالیایی کلاسیک با قهوه و ماسکارپونه.", p:289000, img:"images/tiramisu.jpg"},
+      {n:"دسر لوتوس", en:"Lotus Dessert", d:"دسر خامه‌ای با بیسکوییت و کرم لوتوس.", p:279000, img:"images/lotus-dessert.jpg"},
+      {n:"سن سباستین پسته", en:"Pistachio San Sebastian", d:"چیزکیک باسک با طعم پسته.", p:319000, img:"images/pistachio-san-sebastian.jpg"},
+    ]
+  },
+  {
+    id:"topping", nameFa:"تاپینگ", nameEn:"Toppings", icon:"topping",
+    items:[
+      {n:"بستنی وانیل", en:"Vanilla Ice Cream Topping", d:"یک اسکوپ بستنی وانیل به‌عنوان تاپینگ.", p:49000, img:"images/vanilla-ice-cream-topping.jpg"},
+      {n:"بستنی توت فرنگی", en:"Strawberry Ice Cream Topping", d:"یک اسکوپ بستنی توت‌فرنگی.", p:49000, img:"images/strawberry-ice-cream-topping.jpg"},
+      {n:"بستنی شکلات", en:"Chocolate Ice Cream Topping", d:"یک اسکوپ بستنی شکلاتی.", p:49000, img:"images/chocolate-ice-cream-topping.jpg"},
+      {n:"بستنی نسکافه", en:"Nescafé Ice Cream Topping", d:"یک اسکوپ بستنی با طعم قهوه.", p:49000, img:"images/nescaf-ice-cream-topping.jpg"},
+      {n:"خامه", en:"Whipped Cream", d:"خامه‌ی تازه به‌عنوان تاپینگ.", p:35000, img:"images/whipped-cream.jpg"},
+      {n:"کرم شکلات فندوق", en:"Chocolate Hazelnut Cream", d:"کرم شکلات و فندق به‌عنوان تاپینگ.", p:39000, img:"images/chocolate-hazelnut-cream.jpg"},
+      {n:"کره بادام زمینی", en:"Peanut Butter Topping", d:"کره‌بادام‌زمینی به‌عنوان تاپینگ.", p:39000, img:"images/peanut-butter-topping.jpg"},
+      {n:"موز", en:"Banana Topping", d:"برش‌های تازه‌ی موز به‌عنوان تاپینگ.", p:29000, img:"images/banana-topping.jpg"},
+      {n:"عسل", en:"Honey Topping", d:"عسل طبیعی به‌عنوان تاپینگ.", p:35000, img:"images/honey-topping.jpg"},
+      {n:"بیسکوئیت لوتوس", en:"Lotus Biscuit Topping", d:"بیسکوییت خردشده‌ی لوتوس به‌عنوان تاپینگ.", p:39000, img:"images/lotus-biscuit-topping.jpg"},
+      {n:"کرم لوتوس", en:"Lotus Cream Topping", d:"کرم بیسکوییت لوتوس به‌عنوان تاپینگ.", p:42000, img:"images/lotus-cream-topping.jpg"},
+      {n:"نوتلا", en:"Nutella Topping", d:"نوتلا به‌عنوان تاپینگ.", p:42000, img:"images/nutella-topping.jpg"},
+    ]
+  },
+  {
+    id:"panini", nameFa:"پنینی", nameEn:"Panini", icon:"panini",
+    items:[
+      {n:"پنینی پارمای بوقلمون و پستو", en:"Turkey Parma & Pesto Panini", d:"پنینی گرم با ژامبون بوقلمون، سس پستو و پنیر.", p:349000, img:"images/turkey-parma-pesto-panini.jpg"},
+      {n:"پنینی بیکن و پنیر", en:"Bacon & Cheese Panini", d:"پنینی گرم با بیکن، پنیر ذوب‌شده و سبزیجات تازه.", p:339000, img:"images/bacon-cheese-panini.jpg"},
     ]
   },
 ];
