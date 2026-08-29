@@ -233,7 +233,7 @@
   .card:active{ transform:scale(.985); }
 
   .card-media{
-    width:90px; height:90px;
+    width:70px; height:70px;
     border-radius:50%;
     background:var(--green-100);
     display:flex; align-items:center; justify-content:center;
@@ -889,7 +889,7 @@ const MENU = [
     items:[
       {n:"اسپرسو (روبوستا ۲۰-۸۰)", en:"Espresso (Robusta 20-80)", d:"شات اسپرسو با ترکیب ۲۰٪ روبوستا و ۸۰٪ عربیکا؛ بادی پر و کرمای غلیظ.", p:279000, img:"images/espresso-robusta-20-80.jpg"},
       {n:"اسپرسو (عربیکا ۱۰۰٪)", en:"Espresso (100% Arabica)", d:"شات اسپرسوی خالص عربیکا؛ اسیدیته‌ی متعادل و شیرینی طبیعی.", p:319000, img:"images/espresso-100-arabica.jpg"},
-      {n:"اسپرسو ۵۰-۵۰", en:"Espresso Cherso Blend 50-50", d:"ترکیب مساوی روبوستا و عربیکا؛ تعادل بین بادی و شیرینی.", p:289000, img:"images/espresso-cherso-blend-50-50.jpg"},
+      {n:"اسپرسو  ۵۰-۵۰", en:"Espresso Cherso Blend 50-50", d:"ترکیب مساوی روبوستا و عربیکا؛ تعادل بین بادی و شیرینی.", p:289000, img:"images/espresso-cherso-blend-50-50.jpg"},
       {n:"آمریکانو (روبوستا ۲۰-۸۰)", en:"Americano (Robusta 20-80)", d:"آمریکانوی ترکیبی روبوستا-عربیکا؛ تلخی متعادل و پرانرژی.", p:269000, img:"images/americano-robusta-20-80.jpg"},
       {n:"آمریکانو (عربیکا ۱۰۰٪)", en:"Americano (100% Arabica)", d:"آمریکانوی تمام‌عربیکا؛ طعمی روشن‌تر و ملایم‌تر.", p:299000, img:"images/americano-100-arabica.jpg"},
       {n:"لاته (روبوستا ۲۰-۸۰)", en:"Latte (Robusta 20-80)", d:"لاته با پایه‌ی ترکیبی؛ شیر بخارداده و کف نرم.", p:309000, img:"images/latte-robusta-20-80.jpg"},
@@ -929,6 +929,7 @@ const MENU = [
       {n:"وایت چاکلت", en:"White Chocolate", d:"شکلات سفید ذوب‌شده در شیر داغ؛ شیرین و کرمی.", p:289000, img:"images/white-chocolate.jpg"},
       {n:"شیر نسکافه", en:"Nescafé Milk", d:"شیر داغ با نسکافه؛ ساده، شیرین و آشنا.", p:239000, img:"images/nescaf-milk.jpg"},
       {n:"شیر کاکائو", en:"Cocoa Milk", d:"شیر داغ با کاکائوی خالص، ملایم و شیرین.", p:229000, img:"images/cocoa-milk.jpg"},
+      {n:"چوکو فلکس", en:"Choco Flex", d:"شکلات تلخ ذوب‌شده با تکه‌های آجیل و بادام؛ غلیظ، پرمغز و پرانرژی.", p:000, img:"images/choco-flex.jpg"},
       {n:"شیر لوتوس", en:"Lotus Milk", d:"شیر داغ با طعم بیسکوییت لوتوس؛ کاراملی و دلچسب.", p:289000, img:"images/lotus-milk.jpg"},
       {n:"شیر نوتلا", en:"Nutella Milk", d:"شیر داغ با نوتلا؛ شیرین و فندقی.", p:299000, img:"images/nutella-milk.jpg"},
       {n:"چای کرک", en:"Kurdish Tea", d:"دمی پررنگ به سبک چای کرکی؛ قوی و خوش‌رنگ.", p:199000, img:"images/kurdish-tea.jpg"},
@@ -995,6 +996,8 @@ const MENU = [
     items:[
       {n:"آیس هالووین", en:"Ice Halloween", d:"ماکتیل رنگارنگ و خنک با طعمی میوه‌ای غافلگیرکننده.", p:289000, img:"images/ice-halloween.jpg"},
       {n:"دریم گلکسی", en:"Dream Galaxy", d:"ماکتیل چندلایه با گرادیان رنگی الهام‌گرفته از کهکشان.", p:309000, img:"images/dream-galaxy.jpg"},
+      {n:"گلدن منگو", en:"Golden Mango", d:"ماکتیل استوایی با طعم انبه؛ رنگی طلایی و ترکیبی از شیرینی و ترشی ملایم.", p:309000, img:"images/Golden-Mango.jpg"},
+      {n:"پینک اوشن", en:"Pink Ocean", d:"ماکتیل دولایه با گرادیان صورتی و آبی؛ خنک و مرکباتی، الهام‌گرفته از دریا.", p:309000, img:"images/Pink-Ocean.jpg"},
       {n:"ماکتیل بارتندر", en:"Bartender's Mocktail", d:"ترکیب ویژه‌ی بارمن؛ تازه، ترش و شیرین.", p:299000, img:"images/bartender-s-mocktail.jpg"},
     ]
   },
@@ -1011,6 +1014,9 @@ const MENU = [
     items:[
       {n:"شیک موز شکلات", en:"Banana Chocolate Shake", d:"بستنی، موز تازه و شکلات؛ غلیظ و پرانرژی.", p:309000, img:"images/banana-chocolate-shake.jpg"},
       {n:"شیک نسکافه", en:"Nescafé Shake", d:"طعم قهوه در بافتی یخی و کرمی.", p:299000, img:"images/nescaf-shake.jpg"},
+      {n:"شیک لوتوس", en:"Nescafé Shake", d:"طعم قهوه در بافتی یخی و کرمی.", p:299000, img:"images/lotus-shake.jpg"},
+      {n:"شیک شکلات", en:"Nescafé Shake", d:"طعم قهوه در بافتی یخی و کرمی.", p:299000, img:"images/chocolate-shake.jpg"},
+      {n:"شیک نوتلا", en:"Nescafé Shake", d:"طعم قهوه در بافتی یخی و کرمی.", p:299000, img:"images/nutela-shake.jpg"},
       {n:"شیک وانیل", en:"Vanilla Shake", d:"بستنی وانیل و شیر یخ‌زده؛ کلاسیک و خنک.", p:289000, img:"images/vanilla-shake.jpg"},
       {n:"شیک توت فرنگی", en:"Strawberry Shake", d:"توت‌فرنگی تازه با بستنی وانیل؛ میوه‌ای و رنگارنگ.", p:299000, img:"images/strawberry-shake.jpg"},
       {n:"شیک بادام زمینی", en:"Peanut Butter Shake", d:"کره‌بادام‌زمینی و بستنی؛ غلیظ و مغزدار.", p:319000, img:"images/peanut-butter-shake.jpg"},
@@ -1054,12 +1060,13 @@ const MENU = [
       {n:"کیک دبل چاکلت", en:"Double Chocolate Cake", d:"کیک مرطوب با دو لایه شکلات تلخ و شیری.", p:269000, img:"images/double-chocolate-cake.jpg"},
       {n:"کیک سه شیر", en:"Tres Leches Cake", d:"کیک اسفنجی خیس‌خورده در سه نوع شیر؛ نرم و شیرین.", p:279000, img:"images/tres-leches-cake.jpg"},
       {n:"چیز کیک پسته", en:"Pistachio Cheesecake", d:"چیزکیک خامه‌ای با تاپینگ پسته.", p:299000, img:"images/pistachio-cheesecake.jpg"},
+      {n:"دسر نوتلا فندق", en:"Nutella Hazelnut Dessert", d:"دسر خامه‌ای با نوتلا و تکه‌های فندق؛ شکلاتی و مغزدار.", p:289000, img:"images/nutella-hazelnut-dessert.jpg"},
       {n:"چیز کیک شاه توت", en:"Blackberry Cheesecake", d:"چیزکیک با سس شاه‌توت؛ ترش و شیرین.", p:289000, img:"images/blackberry-cheesecake.jpg"},
       {n:"چیز کیک نوتلا", en:"Nutella Cheesecake", d:"چیزکیک با لایه‌ی نوتلا؛ شکلاتی و فندقی.", p:299000, img:"images/nutella-cheesecake.jpg"},
       {n:"چیز کیک سن سباستین", en:"San Sebastian Cheesecake", d:"چیزکیک باسک با رویه‌ی کاراملی‌شده.", p:309000, img:"images/san-sebastian-cheesecake.jpg"},
       {n:"تیرامیسو", en:"Tiramisu", d:"دسر ایتالیایی کلاسیک با قهوه و ماسکارپونه.", p:289000, img:"images/tiramisu.jpg"},
       {n:"دسر لوتوس", en:"Lotus Dessert", d:"دسر خامه‌ای با بیسکوییت و کرم لوتوس.", p:279000, img:"images/lotus-dessert.jpg"},
-      {n:"سن سباستین پسته", en:"Pistachio San Sebastian", d:"چیزکیک باسک با طعم پسته.", p:319000, img:"images/pistachio-san-sebastian.jpg"},
+      {n:"سن سباستین پسته", en:"Pistachio San Sebastian", d:"چیزکیک باسک با طعم پسته.", p:39000, img:"images/pistachio-san-sebastian.jpg"},
     ]
   },
   {
