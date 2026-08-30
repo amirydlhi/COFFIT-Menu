@@ -295,16 +295,16 @@
     letter-spacing:.01em;
   }
   .add-btn{
-    width:34px; height:34px;
-    flex-shrink:0;
-    border-radius:50%;
+    flex:1;
+    width:100%; height:38px;
+    border-radius:999px;
     border:none;
     background:var(--green-800);
     color:var(--white);
     display:flex; align-items:center; justify-content:center;
     transition:background .18s ease, transform .18s ease;
   }
-  .add-btn svg{ width:16px; height:16px; }
+  .add-btn svg{ width:18px; height:18px; }
   .add-btn.added{ background:var(--green-600); }
   .add-btn:active{ transform:scale(.88); }
 
@@ -493,6 +493,71 @@
     margin-top:10px;
     line-height:1.7;
   }
+
+  /* ---------- Product preview sheet ---------- */
+  .preview-overlay{
+    position:fixed; inset:0;
+    background:rgba(15,26,18,0.45);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:70;
+  }
+  .preview-overlay.open{ opacity:1; pointer-events:auto; }
+  .preview-sheet{
+    position:fixed;
+    left:50%;
+    bottom:0;
+    transform:translate(-50%, 100%);
+    width:100%;
+    max-width:480px;
+    max-height:82vh;
+    background:var(--cream);
+    border-radius:26px 26px 0 0;
+    z-index:71;
+    transition:transform .32s cubic-bezier(.2,.8,.2,1);
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 -20px 40px -20px rgba(0,0,0,0.3);
+    pointer-events:none;
+  }
+  .preview-sheet.open{ transform:translate(-50%, 0); pointer-events:auto; }
+  .preview-body{
+    overflow-y:auto;
+    padding:6px 24px 32px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .preview-media{
+    width:150px; height:150px;
+    border-radius:50%;
+    background:var(--green-100);
+    display:flex; align-items:center; justify-content:center;
+    margin:6px 0 16px;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .preview-media svg{ width:90px; height:90px; }
+  .preview-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .preview-media .media-fallback{ display:none; align-items:center; justify-content:center; width:100%; height:100%; }
+  .preview-media .media-fallback svg{ width:90px; height:90px; }
+  .preview-name{ font-size:19px; font-weight:700; color:var(--green-900); margin:0 0 4px; }
+  .preview-name-en{ font-size:12px; color:var(--green-500); letter-spacing:.02em; margin:0 0 14px; font-family:'Fraunces', serif; font-style:italic; }
+  .preview-desc{ font-size:13px; color:var(--muted); line-height:1.9; margin:0 0 20px; }
+  .preview-add-btn{
+    width:100%;
+    background:var(--green-800);
+    color:var(--white);
+    border:none;
+    border-radius:999px;
+    padding:15px;
+    font-size:14.5px;
+    font-weight:700;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .preview-add-btn svg{ width:16px; height:16px; }
+  .preview-add-btn.added{ background:var(--green-600); }
 
   /* ---------- Search overlay ---------- */
   .search-overlay{
@@ -740,6 +805,14 @@
   </div>
 </div>
 
+<!-- Product preview sheet -->
+<div class="preview-overlay" id="previewOverlay"></div>
+<div class="preview-sheet" id="previewSheet">
+  <div class="sheet-handle"></div>
+  <div class="preview-body" id="previewBody"></div>
+</div>
+
+
 <!-- Search overlay -->
 <div class="search-overlay" id="searchOverlay">
   <div class="search-top">
@@ -929,7 +1002,7 @@ const MENU = [
       {n:"وایت چاکلت", en:"White Chocolate", d:"شکلات سفید ذوب‌شده در شیر داغ؛ شیرین و کرمی.", p:289000, img:"images/white-chocolate.jpg"},
       {n:"شیر نسکافه", en:"Nescafé Milk", d:"شیر داغ با نسکافه؛ ساده، شیرین و آشنا.", p:239000, img:"images/nescaf-milk.jpg"},
       {n:"شیر کاکائو", en:"Cocoa Milk", d:"شیر داغ با کاکائوی خالص، ملایم و شیرین.", p:229000, img:"images/cocoa-milk.jpg"},
-      {n:"چوکو فلکس", en:"Choco Flex", d:"شکلات تلخ ذوب‌شده با تکه‌های آجیل و بادام؛ غلیظ، پرمغز و پرانرژی.", p:000, img:"images/choco-flex.jpg"},
+      {n:"چوکو فلکس", en:"Choco Flex", d:"شکلات تلخ ذوب‌شده با تکه‌های آجیل و بادام؛ غلیظ، پرمغز و پرانرژی.", p:3000, img:"images/choco-flex.jpg"},
       {n:"شیر لوتوس", en:"Lotus Milk", d:"شیر داغ با طعم بیسکوییت لوتوس؛ کاراملی و دلچسب.", p:289000, img:"images/lotus-milk.jpg"},
       {n:"شیر نوتلا", en:"Nutella Milk", d:"شیر داغ با نوتلا؛ شیرین و فندقی.", p:299000, img:"images/nutella-milk.jpg"},
       {n:"چای کرک", en:"Kurdish Tea", d:"دمی پررنگ به سبک چای کرکی؛ قوی و خوش‌رنگ.", p:199000, img:"images/kurdish-tea.jpg"},
@@ -1141,7 +1214,6 @@ MENU.forEach(cat => {
       <p class="card-name-en">${item.en}</p>
       <p class="card-desc">${item.d}</p>
       <div class="card-foot">
-        <span class="price-pill">${fa(item.p)} تومان</span>
         <button class="add-btn" id="add-${id}" aria-label="افزودن">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         </button>
@@ -1149,7 +1221,11 @@ MENU.forEach(cat => {
     `;
     grid.appendChild(card);
 
-    card.querySelector('.add-btn').addEventListener('click', () => addToCart(id, item, cat));
+    card.querySelector('.add-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      addToCart(id, item, cat);
+    });
+    card.addEventListener('click', () => openPreview(id, item, cat));
   });
 
   sec.appendChild(grid);
@@ -1231,6 +1307,40 @@ function closeSheet(){
 cartBar.addEventListener('click', openSheet);
 document.getElementById('sheetCloseBtn').addEventListener('click', closeSheet);
 sheetOverlay.addEventListener('click', closeSheet);
+
+/* ============ Product preview sheet ============ */
+const previewOverlay = document.getElementById('previewOverlay');
+const previewSheet = document.getElementById('previewSheet');
+const previewBody = document.getElementById('previewBody');
+
+function openPreview(id, item, cat){
+  const added = !!cart[id];
+  previewBody.innerHTML = `
+    <div class="preview-media">${mediaHtml(item, cat.icon)}</div>
+    <p class="preview-name">${item.n}</p>
+    <p class="preview-name-en">${item.en}</p>
+    <p class="preview-desc">${item.d}</p>
+    <button class="preview-add-btn${added ? ' added' : ''}" id="previewAddBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      <span>${added ? 'اضافه شد' : 'افزودن به سبد'}</span>
+    </button>
+  `;
+  document.getElementById('previewAddBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    addToCart(id, item, cat);
+    closePreview();
+  });
+  previewOverlay.classList.add('open');
+  previewSheet.classList.add('open');
+}
+function closePreview(){
+  previewOverlay.classList.remove('open');
+  previewSheet.classList.remove('open');
+}
+previewOverlay.addEventListener('click', closePreview);
+previewSheet.addEventListener('click', (e) => {
+  if (e.target === previewSheet) closePreview();
+});
 
 function renderSheet(){
   const entries = Object.entries(cart);
