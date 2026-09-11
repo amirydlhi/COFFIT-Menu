@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کافیت — پیشخوان سفارش‌ها</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-900:#122519;
+    --green-800:#173321;
+    --green-700:#1F3B2C;
+    --green-600:#2C5038;
+    --green-500:#3E6B4B;
+    --green-300:#8FB39A;
+    --green-150:#D9E7DC;
+    --green-100:#EAF1EB;
+    --muted:#7C8B7E;
+    --line:rgba(22,36,27,0.10);
+    --radius-lg:22px;
+    --radius-md:16px;
+    --amber:#B8863B;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0; padding:0;}
+  body{
+    font-family:'Vazirmatn', sans-serif;
+    background:var(--green-900);
+    color:var(--green-900);
+    min-height:100vh;
+  }
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 26px;
+    background:var(--green-800);
+    color:#fff;
+    position:sticky; top:0; z-index:5;
+  }
+  header h1{ font-size:18px; margin:0; font-weight:700; }
+  .live-dot{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; color:var(--green-150);
+  }
+  .live-dot::before{
+    content:''; width:8px; height:8px; border-radius:50%; background:#4CAF6D;
+    box-shadow:0 0 0 0 rgba(76,175,109,.6);
+    animation:pulse 1.8s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(76,175,109,.5); }
+    70%{ box-shadow:0 0 0 8px rgba(76,175,109,0); }
+    100%{ box-shadow:0 0 0 0 rgba(76,175,109,0); }
+  }
+  .queue-badge{
+    background:var(--green-100); color:var(--green-800);
+    font-weight:700; font-size:13px;
+    padding:6px 14px; border-radius:999px;
+  }
+  main{
+    max-width:720px; margin:0 auto; padding:20px 16px 120px;
+  }
+  .hint-bar{
+    background:var(--green-800); color:var(--green-150);
+    border-radius:var(--radius-md);
+    padding:14px 18px; font-size:13.5px; margin-bottom:18px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .hint-bar kbd{
+    background:var(--green-100); color:var(--green-900);
+    border-radius:8px; padding:3px 10px; font-weight:700; font-size:12.5px;
+  }
+  .empty-state{
+    text-align:center; color:var(--green-150); padding:80px 20px;
+  }
+  .empty-state .emoji{ font-size:40px; margin-bottom:10px; }
+  .empty-state p{ font-size:14px; margin:0; }
+
+  .order-card{
+    background:#fff; border-radius:var(--radius-lg);
+    padding:18px 18px 16px; margin-bottom:14px;
+    border:1px solid var(--line);
+  }
+  .order-card.next{
+    border:2px solid var(--green-600);
+    box-shadow:0 6px 24px rgba(18,37,25,0.15);
+  }
+  .order-top{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .order-tag{
+    font-size:11.5px; font-weight:800; letter-spacing:.3px;
+    padding:4px 10px; border-radius:999px;
+    background:var(--green-600); color:#fff;
+  }
+  .order-card:not(.next) .order-tag{ background:var(--green-150); color:var(--green-800); }
+  .order-time{ font-size:12px; color:var(--muted); }
+  .order-items{ margin:0 0 12px; }
+  .order-row{
+    display:flex; justify-content:space-between; gap:10px;
+    font-size:14.5px; padding:5px 0;
+    border-top:1px dashed var(--line);
+  }
+  .order-row:first-child{ border-top:none; }
+  .order-row .qty{ color:var(--green-700); font-weight:700; }
+  .order-foot{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:10px; border-top:1px solid var(--line);
+  }
+  .order-count{ font-size:12.5px; color:var(--muted); }
+  .print-btn{
+    border:none; border-radius:999px; padding:9px 18px;
+    font-family:inherit; font-weight:700; font-size:13px; cursor:pointer;
+    background:var(--green-800); color:#fff;
+  }
+  .order-card:not(.next) .print-btn{ background:var(--green-150); color:var(--green-800); }
+
+  /* ============ Print area ============ */
+  #printArea{ display:none; }
+  @media print{
+    body *{ visibility:hidden; }
+    #printArea, #printArea *{ visibility:visible; }
+    #printArea{
+      display:block !important;
+      position:absolute; top:0; right:0; width:78mm;
+      font-family:'Vazirmatn', sans-serif; color:#000;
+      padding:6mm;
+    }
+    #printArea h2{ text-align:center; font-size:16px; margin:0 0 2mm; }
+    #printArea .p-time{ text-align:center; font-size:11px; color:#333; margin-bottom:4mm; }
+    #printArea .p-row{
+      display:flex; justify-content:space-between; font-size:13px;
+      border-top:1px dashed #999; padding:2mm 0;
+    }
+    #printArea .p-row:first-of-type{ border-top:1px solid #000; }
+    #printArea .p-total{
+      border-top:1px solid #000; margin-top:2mm; padding-top:2mm;
+      display:flex; justify-content:space-between; font-weight:700; font-size:13.5px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>کافیت — پیشخوان</h1>
+  <span class="live-dot">آنلاین</span>
+  <span class="queue-badge" id="queueBadge">۰ سفارش</span>
+</header>
+
+<main>
+  <div class="hint-bar">
+    <span>برای چاپ سفارشِ بعدی (بالای صف) کلید <kbd>Enter</kbd> رو بزن</span>
+  </div>
+  <div id="listWrap"></div>
+</main>
+
+<!-- ============ Hidden printable receipt ============ -->
+<div id="printArea">
+  <h2>کافیت</h2>
+  <div class="p-time" id="pTime"></div>
+  <div id="pItems"></div>
+  <div class="p-total">
+    <span>تعداد اقلام</span>
+    <span id="pCount"></span>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getFirestore, collection, query, where, orderBy,
+    onSnapshot, doc, updateDoc
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  // ⚠️ باید دقیقاً همون آبجکتِ فایربیسِ index.html باشه
+  const firebaseConfig = {
+    apiKey: "AIzaSyD6ow0JeBZLLZm39WDeA0zERWj8CEF53AU",
+    authDomain: "cafit-orders.firebaseapp.com",
+    projectId: "cafit-orders",
+    storageBucket: "cafit-orders.firebasestorage.app",
+    messagingSenderId: "365784225003",
+    appId: "1:365784225003:web:def17c0d08983e5e559aae"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const listWrap = document.getElementById('listWrap');
+  const queueBadge = document.getElementById('queueBadge');
+
+  const faDigits = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+  let queue = [];
+  let knownIds = new Set();
+  let printing = false;
+
+  const q = query(
+    collection(db, "orders"),
+    where("printed", "==", false),
+    orderBy("createdAt", "asc")
+  );
+
+  onSnapshot(q, (snap) => {
+    const newQueue = [];
+    let hasNewArrival = false;
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      newQueue.push({ id: docSnap.id, ...data });
+      if (!knownIds.has(docSnap.id)) hasNewArrival = true;
+    });
+    knownIds = new Set(newQueue.map(o => o.id));
+    queue = newQueue;
+    render();
+    if (hasNewArrival) beep();
+  });
+
+  function render(){
+    queueBadge.textContent = `${faDigits(queue.length)} سفارش`;
+    if (queue.length === 0){
+      listWrap.innerHTML = `
+        <div class="empty-state">
+          <div class="emoji">☕</div>
+          <p>منتظر سفارش جدید...</p>
+        </div>`;
+      return;
+    }
+    listWrap.innerHTML = queue.map((order, idx) => {
+      const time = order.createdAt?.toDate
+        ? order.createdAt.toDate().toLocaleTimeString('fa-IR', {hour:'2-digit', minute:'2-digit'})
+        : '';
+      const rows = order.items.map(it => `
+        <div class="order-row">
+          <span><span class="qty">${faDigits(it.qty)}×</span> ${it.name}</span>
+        </div>`).join('');
+      return `
+        <div class="order-card ${idx === 0 ? 'next' : ''}">
+          <div class="order-top">
+            <span class="order-tag">${idx === 0 ? 'بعدی — Enter' : 'در صف'}</span>
+            <span class="order-time">${time}</span>
+          </div>
+          <div class="order-items">${rows}</div>
+          <div class="order-foot">
+            <span class="order-count">${faDigits(order.count)} مورد</span>
+            <button class="print-btn" data-id="${order.id}">چاپ</button>
+          </div>
+        </div>`;
+    }).join('');
+
+    listWrap.querySelectorAll('.print-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const order = queue.find(o => o.id === btn.dataset.id);
+        if (order) printOrder(order);
+      });
+    });
+  }
+
+  function printOrder(order){
+    if (printing) return;
+    printing = true;
+
+    document.getElementById('pTime').textContent =
+      order.createdAt?.toDate
+        ? order.createdAt.toDate().toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'})
+        : new Date().toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'});
+
+    document.getElementById('pItems').innerHTML = order.items.map(it => `
+      <div class="p-row"><span>${faDigits(it.qty)}× ${it.name}</span></div>
+    `).join('');
+    document.getElementById('pCount').textContent = `${faDigits(order.count)} مورد`;
+
+    const finish = async () => {
+      window.removeEventListener('afterprint', finish);
+      try{
+        await updateDoc(doc(db, 'orders', order.id), { printed: true });
+      }catch(err){ console.warn('بروزرسانی وضعیت سفارش ناموفق بود:', err); }
+      printing = false;
+    };
+    window.addEventListener('afterprint', finish);
+    window.print();
+    // در برخی مرورگرها afterprint شلیک نمیشه؛ این یه فال‌بک امن است
+    setTimeout(() => { if (printing) finish(); }, 4000);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && queue.length > 0){
+      e.preventDefault();
+      printOrder(queue[0]);
+    }
+  });
+
+  // بوق کوتاه هنگام رسیدن سفارش جدید (بدون فایل صوتی خارجی)
+  function beep(){
+    try{
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine'; osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
+      osc.start(); osc.stop(ctx.currentTime + 0.4);
+    }catch(e){}
+  }
+
+  render();
+</script>
+</body>
+</html>
