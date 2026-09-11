@@ -1447,13 +1447,64 @@ function clearCart(){
   renderSheet();
 }
 
-document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+const ORDERS_API = "https://script.google.com/macros/s/AKfycbxD-74jH6N1Om8vNTN6t6P1MVg7R9P1tbBLgWioivS3r8S_rGA3U_45UzwvOxSQRQbrrw/exec";
+
+function getTableNumber(){
+  const params = new URLSearchParams(window.location.search);
+  return params.get("table") || "99";
+}
+
+function makeOrderId(){
+  return "ORD-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+}
+
+document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
   if (Object.keys(cart).length === 0) return;
+
   const snapshot = Object.entries(cart).map(([id, qty]) => ({item: ITEM_INDEX[id], qty}));
   const {count, total} = cartTotals();
-  closeSheet();
-  clearCart();
-  showReceipt(snapshot, count, total);
+  const table = getTableNumber();
+  const orderId = makeOrderId();
+
+  const itemsText = snapshot
+    .map(({item, qty}) => `${qty}× ${item.n}`)
+    .join(' | ');
+
+  const payload = {
+    orderId,
+    createdAt: new Date().toISOString(),
+    table,
+    items: itemsText,
+    count,
+    total,
+    status: "pending",
+    customerNote: "",
+    printed: false
+  };
+
+  const btn = document.getElementById('checkoutBtn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'در حال ثبت سفارش…';
+
+  try {
+    await fetch(ORDERS_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+      body: JSON.stringify(payload)
+    });
+
+    closeSheet();
+    clearCart();
+    showReceipt(snapshot, count, total);
+  } catch (error) {
+    console.error('Order submit error:', error);
+    alert('ارسال سفارش انجام نشد. دوباره تلاش کنید.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
 });
 
 document.getElementById('receiptCloseBtn').addEventListener('click', closeReceipt);
