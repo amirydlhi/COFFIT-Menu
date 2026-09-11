@@ -1447,64 +1447,14 @@ function clearCart(){
   renderSheet();
 }
 
-const ORDERS_API = "https://script.google.com/macros/s/AKfycbxD-74jH6N1Om8vNTN6t6P1MVg7R9P1tbBLgWioivS3r8S_rGA3U_45UzwvOxSQRQbrrw/exec";
-
-function getTableNumber(){
-  const params = new URLSearchParams(window.location.search);
-  return params.get("table") || "99";
-}
-
-function makeOrderId(){
-  return "ORD-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
-}
-
-document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
+document.getElementById('checkoutBtn').addEventListener('click', ()=>{
   if (Object.keys(cart).length === 0) return;
-
   const snapshot = Object.entries(cart).map(([id, qty]) => ({item: ITEM_INDEX[id], qty}));
   const {count, total} = cartTotals();
-  const table = getTableNumber();
-  const orderId = makeOrderId();
-
-  const itemsText = snapshot
-    .map(({item, qty}) => `${qty}× ${item.n}`)
-    .join(' | ');
-
-  const payload = {
-    orderId,
-    createdAt: new Date().toISOString(),
-    table,
-    items: itemsText,
-    count,
-    total,
-    status: "pending",
-    customerNote: "",
-    printed: false
-  };
-
-  const btn = document.getElementById('checkoutBtn');
-  const originalText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = 'در حال ثبت سفارش…';
-
-  try {
-    await fetch(ORDERS_API, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify(payload)
-    });
-
-    closeSheet();
-    clearCart();
-    showReceipt(snapshot, count, total);
-  } catch (error) {
-    console.error('Order submit error:', error);
-    alert('ارسال سفارش انجام نشد. دوباره تلاش کنید.');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = originalText;
-  }
+  if (window.pushOrderToFirestore) window.pushOrderToFirestore(snapshot, count, total);
+  closeSheet();
+  clearCart();
+  showReceipt(snapshot, count, total);
 });
 
 document.getElementById('receiptCloseBtn').addEventListener('click', closeReceipt);
@@ -1611,6 +1561,41 @@ menuBtn.addEventListener('click', ()=>{
   applyTheme(current === 'dark' ? 'light' : 'dark');
 });
 
+</script>
+
+<!-- ============ Firebase: fires each finalized order to the counter dashboard ============ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  // ⚠️ همین آبجکت رو توی counter.html هم عیناً کپی کن (باید هر دو فایل به یک پروژه‌ی Firebase وصل باشن)
+  const firebaseConfig = {
+    apiKey: "AIzaSyD6ow0JeBZLLZm39WDeA0zERWj8CEF53AU",
+    authDomain: "cafit-orders.firebaseapp.com",
+    projectId: "cafit-orders",
+    storageBucket: "cafit-orders.firebasestorage.app",
+    messagingSenderId: "365784225003",
+    appId: "1:365784225003:web:def17c0d08983e5e559aae"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // این تابع رو اسکریپت اصلی صدا می‌زنه (پایین‌تر همون window.pushOrderToFirestore)
+  window.pushOrderToFirestore = async function(snapshot, count, total){
+    try{
+      await addDoc(collection(db, "orders"), {
+        items: snapshot.map(({item, qty}) => ({ name: item.n, qty, price: item.p })),
+        count,
+        total,
+        printed: false,
+        createdAt: serverTimestamp()
+      });
+    }catch(err){
+      // اگه نت قطع باشه یا فایربیس تنظیم نشده باشه، سفارش لوکال (رسید روی گوشی مشتری) هنوز درست کار می‌کنه
+      console.warn('ثبت سفارش در فایربیس ناموفق بود:', err);
+    }
+  };
 </script>
 </body>
 </html>
