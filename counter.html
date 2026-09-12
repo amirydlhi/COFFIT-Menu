@@ -95,6 +95,12 @@
   }
   .order-card:not(.next) .order-tag{ background:var(--green-150); color:var(--green-800); }
   .order-time{ font-size:12px; color:var(--muted); }
+  .order-table{
+    display:inline-block;
+    font-size:13px; font-weight:800;
+    color:var(--amber);
+    margin-bottom:8px;
+  }
   .order-items{ margin:0 0 12px; }
   .order-row{
     display:flex; justify-content:space-between; gap:10px;
@@ -127,7 +133,8 @@
       padding:6mm;
     }
     #printArea h2{ text-align:center; font-size:16px; margin:0 0 2mm; }
-    #printArea .p-time{ text-align:center; font-size:11px; color:#333; margin-bottom:4mm; }
+    #printArea .p-time{ text-align:center; font-size:11px; color:#333; margin-bottom:2mm; }
+    #printArea .p-table{ text-align:center; font-size:14px; font-weight:700; margin-bottom:4mm; }
     #printArea .p-row{
       display:flex; justify-content:space-between; font-size:13px;
       border-top:1px dashed #999; padding:2mm 0;
@@ -159,6 +166,7 @@
 <div id="printArea">
   <h2>کافیت</h2>
   <div class="p-time" id="pTime"></div>
+  <div class="p-table" id="pTable"></div>
   <div id="pItems"></div>
   <div class="p-total">
     <span>تعداد اقلام</span>
@@ -167,53 +175,50 @@
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import {
-    getFirestore, collection, query, where, orderBy,
-    onSnapshot, doc, updateDoc
-  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-  // ⚠️ باید دقیقاً همون آبجکتِ فایربیسِ index.html باشه
-  const firebaseConfig = {
-    apiKey: "AIzaSyD6ow0JeBZLLZm39WDeA0zERWj8CEF53AU",
-    authDomain: "cafit-orders.firebaseapp.com",
-    projectId: "cafit-orders",
-    storageBucket: "cafit-orders.firebasestorage.app",
-    messagingSenderId: "365784225003",
-    appId: "1:365784225003:web:def17c0d08983e5e559aae"
-  };
+  // ⚠️ باید دقیقاً همون مقادیرِ index.html باشه
+  const SUPABASE_URL = 'https://rcaunkuwmpvywcogjyyn.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJjYXVua3V3bXB2eXdjb2dqeXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNTQwNTYsImV4cCI6MjEwNDczMDA1Nn0.y3J502x_3dfZfNs2ecmJiru8bpLZoNS3B8DBbXd14ZM';
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const listWrap = document.getElementById('listWrap');
   const queueBadge = document.getElementById('queueBadge');
 
   const faDigits = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+  const itemCount = order => order.items.reduce((sum, it) => sum + it.qty, 0);
 
   let queue = [];
   let knownIds = new Set();
   let printing = false;
 
-  const q = query(
-    collection(db, "orders"),
-    where("printed", "==", false),
-    orderBy("createdAt", "asc")
-  );
+  async function loadQueue(){
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true });
 
-  onSnapshot(q, (snap) => {
-    const newQueue = [];
-    let hasNewArrival = false;
-    snap.forEach(docSnap => {
-      const data = docSnap.data();
-      newQueue.push({ id: docSnap.id, ...data });
-      if (!knownIds.has(docSnap.id)) hasNewArrival = true;
-    });
-    knownIds = new Set(newQueue.map(o => o.id));
-    queue = newQueue;
+    if (error){ console.warn('دریافت سفارش‌ها ناموفق بود:', error); return; }
+
+    const newIds = new Set(data.map(o => o.id));
+    const hasNewArrival = data.some(o => !knownIds.has(o.id));
+    knownIds = newIds;
+    queue = data;
     render();
     if (hasNewArrival) beep();
-  });
+  }
+
+  // گوش دادن به تغییرات لحظه‌ای (سفارش جدید / پرینت شدن یه سفارش روی گوشیِ دیگه)
+  supabase
+    .channel('orders-realtime')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => loadQueue())
+    .subscribe();
+
+  // چون شبکه گاهی وصل/قطع میشه، هر چند ثانیه هم مستقل از realtime رفرش می‌کنیم
+  setInterval(loadQueue, 15000);
+  loadQueue();
 
   function render(){
     queueBadge.textContent = `${faDigits(queue.length)} سفارش`;
@@ -226,8 +231,8 @@
       return;
     }
     listWrap.innerHTML = queue.map((order, idx) => {
-      const time = order.createdAt?.toDate
-        ? order.createdAt.toDate().toLocaleTimeString('fa-IR', {hour:'2-digit', minute:'2-digit'})
+      const time = order.created_at
+        ? new Date(order.created_at).toLocaleTimeString('fa-IR', {hour:'2-digit', minute:'2-digit'})
         : '';
       const rows = order.items.map(it => `
         <div class="order-row">
@@ -239,9 +244,10 @@
             <span class="order-tag">${idx === 0 ? 'بعدی — Enter' : 'در صف'}</span>
             <span class="order-time">${time}</span>
           </div>
+          ${order.table_number ? `<div class="order-table">میز ${faDigits(order.table_number)}</div>` : ''}
           <div class="order-items">${rows}</div>
           <div class="order-foot">
-            <span class="order-count">${faDigits(order.count)} مورد</span>
+            <span class="order-count">${faDigits(itemCount(order))} مورد</span>
             <button class="print-btn" data-id="${order.id}">چاپ</button>
           </div>
         </div>`;
@@ -249,7 +255,7 @@
 
     listWrap.querySelectorAll('.print-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const order = queue.find(o => o.id === btn.dataset.id);
+        const order = queue.find(o => String(o.id) === btn.dataset.id);
         if (order) printOrder(order);
       });
     });
@@ -259,21 +265,21 @@
     if (printing) return;
     printing = true;
 
-    document.getElementById('pTime').textContent =
-      order.createdAt?.toDate
-        ? order.createdAt.toDate().toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'})
-        : new Date().toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('pTime').textContent = order.created_at
+      ? new Date(order.created_at).toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'})
+      : new Date().toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'});
+
+    document.getElementById('pTable').textContent = order.table_number ? `میز ${faDigits(order.table_number)}` : '';
 
     document.getElementById('pItems').innerHTML = order.items.map(it => `
       <div class="p-row"><span>${faDigits(it.qty)}× ${it.name}</span></div>
     `).join('');
-    document.getElementById('pCount').textContent = `${faDigits(order.count)} مورد`;
+    document.getElementById('pCount').textContent = `${faDigits(itemCount(order))} مورد`;
 
     const finish = async () => {
       window.removeEventListener('afterprint', finish);
-      try{
-        await updateDoc(doc(db, 'orders', order.id), { printed: true });
-      }catch(err){ console.warn('بروزرسانی وضعیت سفارش ناموفق بود:', err); }
+      const { error } = await supabase.from('orders').update({ status: 'printed' }).eq('id', order.id);
+      if (error) console.warn('بروزرسانی وضعیت سفارش ناموفق بود:', error);
       printing = false;
     };
     window.addEventListener('afterprint', finish);
