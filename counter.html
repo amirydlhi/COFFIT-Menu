@@ -4,174 +4,316 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>کافیت — پیشخوان سفارش‌ها</title>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --green-900:#122519;
-    --green-800:#173321;
-    --green-700:#1F3B2C;
-    --green-600:#2C5038;
-    --green-500:#3E6B4B;
-    --green-300:#8FB39A;
-    --green-150:#D9E7DC;
-    --green-100:#EAF1EB;
-    --muted:#7C8B7E;
-    --line:rgba(22,36,27,0.10);
-    --radius-lg:22px;
-    --radius-md:16px;
-    --amber:#B8863B;
+    --bg:#170F09;
+    --header-bg:#20150C;
+    --paper:#FFFCF5;
+    --paper-muted:#EFE3CF;
+    --ink:#241708;
+    --muted:#8D7A63;
+    --copper:#BE7F3E;
+    --copper-deep:#7A4B22;
+    --line:rgba(36,23,8,.16);
+    --line-soft:rgba(255,252,245,.12);
+    --radius-lg:12px;
+    --radius-md:8px;
+    --amber:#BE7F3E;
   }
   *{box-sizing:border-box;}
   html,body{margin:0; padding:0;}
   body{
     font-family:'Vazirmatn', sans-serif;
-    background:var(--green-900);
-    color:var(--green-900);
+    background:var(--bg);
+    background-image:radial-gradient(circle at 20% 0%, rgba(190,127,62,.06), transparent 45%);
+    color:var(--ink);
     min-height:100vh;
   }
   header{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 26px;
-    background:var(--green-800);
-    color:#fff;
+    display:flex; align-items:center; gap:12px;
+    padding:16px 22px;
+    background:var(--header-bg);
+    color:var(--paper);
+    border-bottom:1px solid var(--line-soft);
     position:sticky; top:0; z-index:5;
   }
-  header h1{ font-size:18px; margin:0; font-weight:700; }
+  .brand{ display:flex; align-items:center; gap:10px; flex:1; }
+  .brand svg{ width:26px; height:26px; flex-shrink:0; color:var(--copper); }
+  header h1{ font-size:17px; margin:0; font-weight:700; letter-spacing:.2px; }
   .live-dot{
-    display:inline-flex; align-items:center; gap:8px;
-    font-size:12.5px; color:var(--green-150);
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:12px; color:var(--muted);
   }
   .live-dot::before{
-    content:''; width:8px; height:8px; border-radius:50%; background:#4CAF6D;
-    box-shadow:0 0 0 0 rgba(76,175,109,.6);
+    content:''; width:7px; height:7px; border-radius:50%; background:#5FAE68;
+    box-shadow:0 0 0 0 rgba(95,174,104,.55);
     animation:pulse 1.8s infinite;
   }
   @keyframes pulse{
-    0%{ box-shadow:0 0 0 0 rgba(76,175,109,.5); }
-    70%{ box-shadow:0 0 0 8px rgba(76,175,109,0); }
-    100%{ box-shadow:0 0 0 0 rgba(76,175,109,0); }
+    0%{ box-shadow:0 0 0 0 rgba(95,174,104,.5); }
+    70%{ box-shadow:0 0 0 7px rgba(95,174,104,0); }
+    100%{ box-shadow:0 0 0 0 rgba(95,174,104,0); }
   }
   .queue-badge{
-    background:var(--green-100); color:var(--green-800);
-    font-weight:700; font-size:13px;
-    padding:6px 14px; border-radius:999px;
+    background:var(--copper-deep); color:var(--paper);
+    font-weight:700; font-size:12.5px;
+    padding:6px 13px; border-radius:999px;
   }
+  .history-link{
+    display:inline-flex; align-items:center; gap:6px;
+    color:var(--muted); text-decoration:none;
+    font-size:12.5px; font-weight:700;
+    border:1px solid var(--line-soft); border-radius:999px;
+    padding:6px 13px;
+  }
+  .history-link svg{ width:14px; height:14px; }
+  .history-link:hover{ color:var(--paper); border-color:var(--copper); }
   main{
-    max-width:720px; margin:0 auto; padding:20px 16px 120px;
+    max-width:640px; margin:0 auto; padding:18px 16px 100px;
   }
   .hint-bar{
-    background:var(--green-800); color:var(--green-150);
-    border-radius:var(--radius-md);
-    padding:14px 18px; font-size:13.5px; margin-bottom:18px;
+    color:var(--muted);
+    border-top:1px dashed var(--line-soft);
+    border-bottom:1px dashed var(--line-soft);
+    padding:12px 4px; font-size:13px; margin-bottom:24px;
     display:flex; align-items:center; justify-content:space-between; gap:10px;
   }
   .hint-bar kbd{
-    background:var(--green-100); color:var(--green-900);
-    border-radius:8px; padding:3px 10px; font-weight:700; font-size:12.5px;
+    background:var(--paper); color:var(--ink);
+    border-radius:6px; padding:3px 10px; font-weight:700; font-size:12px;
+    box-shadow:0 1px 0 rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.6);
+  }
+  .print-next-bar{
+    position:fixed; bottom:0; inset-inline:0; z-index:6;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:14px 18px calc(14px + env(safe-area-inset-bottom));
+    background:var(--header-bg);
+    border-top:1px solid var(--line-soft);
+  }
+  .print-next-btn{
+    display:inline-flex; align-items:center; gap:9px;
+    border:none; border-radius:999px;
+    padding:14px 30px;
+    font-family:inherit; font-weight:800; font-size:15.5px; cursor:pointer;
+    background:var(--copper-deep); color:var(--paper);
+    max-width:520px; width:100%; justify-content:center;
+  }
+  .print-next-btn:disabled{ opacity:.4; cursor:default; }
+  .print-next-btn kbd{
+    background:rgba(255,252,245,.16); border-radius:6px;
+    padding:2px 9px; font-weight:700; font-size:12.5px;
   }
   .empty-state{
-    text-align:center; color:var(--green-150); padding:80px 20px;
+    text-align:center; color:var(--muted); padding:70px 20px 40px;
   }
-  .empty-state .emoji{ font-size:40px; margin-bottom:10px; }
+  .empty-state svg{ width:52px; height:52px; color:var(--copper); margin-bottom:14px; }
   .empty-state p{ font-size:14px; margin:0; }
+  .steam{ animation:rise 3s ease-in-out infinite; transform-origin:bottom; }
+  .steam.s2{ animation-delay:.5s; }
+  @keyframes rise{
+    0%{ opacity:0; transform:translateY(0) scaleY(.8); }
+    35%{ opacity:.9; }
+    100%{ opacity:0; transform:translateY(-6px) scaleY(1.1); }
+  }
 
   .order-card{
-    background:#fff; border-radius:var(--radius-lg);
-    padding:18px 18px 16px; margin-bottom:14px;
-    border:1px solid var(--line);
+    position:relative;
+    background:var(--paper-muted);
+    border-radius:0 0 var(--radius-lg) var(--radius-lg);
+    padding:20px 18px 15px;
+    margin:22px 6px 16px;
+    box-shadow:0 8px 16px -12px rgba(0,0,0,.6);
+    transform:rotate(.35deg) scale(.985);
+  }
+  .order-card:nth-child(even){ transform:rotate(-.3deg) scale(.985); }
+  .order-card::before{
+    content:'';
+    position:absolute; top:-8px; left:10px; right:10px; height:8px;
+    background-image:
+      linear-gradient(135deg, transparent 50%, var(--paper-muted) 50%),
+      linear-gradient(-135deg, transparent 50%, var(--paper-muted) 50%);
+    background-size:12px 8px; background-repeat:repeat-x; background-position:top;
   }
   .order-card.next{
-    border:2px solid var(--green-600);
-    box-shadow:0 6px 24px rgba(18,37,25,0.15);
+    background:var(--paper);
+    box-shadow:5px 5px 0 var(--copper-deep);
+    transform:rotate(0deg) scale(1);
+    z-index:1;
+  }
+  .order-card.next::before{
+    background-image:
+      linear-gradient(135deg, transparent 50%, var(--paper) 50%),
+      linear-gradient(-135deg, transparent 50%, var(--paper) 50%);
+    background-size:12px 8px; background-repeat:repeat-x; background-position:top;
   }
   .order-top{
     display:flex; align-items:center; justify-content:space-between;
     margin-bottom:10px;
   }
   .order-tag{
-    font-size:11.5px; font-weight:800; letter-spacing:.3px;
-    padding:4px 10px; border-radius:999px;
-    background:var(--green-600); color:#fff;
+    font-size:12px; font-weight:700;
+    padding:4px 11px; border-radius:6px;
+    background:var(--paper); color:var(--muted);
   }
-  .order-card:not(.next) .order-tag{ background:var(--green-150); color:var(--green-800); }
+  .order-card.next .order-tag{ background:var(--copper-deep); color:var(--paper); }
   .order-time{ font-size:12px; color:var(--muted); }
   .order-table{
+    display:inline-flex; align-items:center;
+    font-size:16px; font-weight:800;
+    color:var(--paper);
+    background:var(--copper-deep);
+    border-radius:7px;
+    padding:5px 13px;
+    margin:0 0 9px 8px;
+  }
+  .order-name{
     display:inline-block;
-    font-size:13px; font-weight:800;
-    color:var(--amber);
-    margin-bottom:8px;
+    font-size:16px; font-weight:700;
+    color:var(--ink);
+    margin:0 0 9px 8px;
+  }
+  .order-phone{
+    display:inline-block;
+    font-size:15.5px; font-weight:700;
+    color:var(--copper-deep);
+    text-decoration:none;
+    direction:ltr; unicode-bidi:isolate;
+    margin:0 0 9px 8px;
   }
   .order-items{ margin:0 0 12px; }
   .order-row{
     display:flex; justify-content:space-between; gap:10px;
-    font-size:14.5px; padding:5px 0;
+    font-size:16px; padding:7px 0;
     border-top:1px dashed var(--line);
+    color:var(--ink);
   }
   .order-row:first-child{ border-top:none; }
-  .order-row .qty{ color:var(--green-700); font-weight:700; }
+  .order-row .qty{ color:var(--copper-deep); font-weight:700; }
   .order-foot{
     display:flex; align-items:center; justify-content:space-between;
     padding-top:10px; border-top:1px solid var(--line);
   }
-  .order-count{ font-size:12.5px; color:var(--muted); }
+  .order-count{ font-size:13px; color:var(--muted); }
   .print-btn{
-    border:none; border-radius:999px; padding:9px 18px;
-    font-family:inherit; font-weight:700; font-size:13px; cursor:pointer;
-    background:var(--green-800); color:#fff;
+    display:inline-flex; align-items:center; gap:7px;
+    border:none; border-radius:var(--radius-md); padding:12px 22px;
+    font-family:inherit; font-weight:700; font-size:15px; cursor:pointer;
+    background:var(--paper); color:var(--muted);
   }
-  .order-card:not(.next) .print-btn{ background:var(--green-150); color:var(--green-800); }
+  .print-btn .print-icon{ width:16px; height:16px; }
+  .order-card.next .print-btn{ background:var(--copper-deep); color:var(--paper); }
 
   /* ============ Print area ============ */
-  #printArea{ display:none; }
+  /* این استایل‌ها همیشه فعالن (نه فقط داخل @media print) تا وقتی برای اندازه‌گیری
+     ارتفاع قبل از چاپ موقتاً نمایانش می‌کنیم، دقیقاً همون شکلی باشه که چاپ میشه. */
+  #printArea{
+    display:none;
+    width:80mm;
+    font-family:'Vazirmatn', sans-serif; color:#000;
+    padding:4mm 4mm 6mm;
+  }
+  #printArea .r-brand{
+    text-align:center; font-size:22px; font-weight:800;
+    letter-spacing:1px; margin:0 0 2mm;
+  }
+  #printArea .r-address{
+    text-align:center; font-size:11px; margin-bottom:3mm;
+  }
+  #printArea .r-divider{ border-top:1px dashed #000; margin:2mm 0; }
+  #printArea .r-meta-row{
+    display:flex; justify-content:space-between;
+    font-size:11.5px; padding:1mm 0;
+  }
+  #printArea .r-table{
+    width:100%; border-collapse:collapse; margin:3mm 0 2mm;
+    font-size:11px;
+  }
+  #printArea .r-table th, #printArea .r-table td{
+    border:1px solid #000; padding:1.2mm 1mm; text-align:center;
+  }
+  #printArea .r-table th{ font-weight:700; }
+  #printArea .r-table td.r-name{ text-align:right; }
+  #printArea .r-summary{ margin-top:2mm; }
+  #printArea .r-summary-row{
+    display:flex; justify-content:space-between;
+    font-size:12px; padding:1mm 0;
+  }
+  #printArea .r-summary-row.total{
+    border-top:1px solid #000; margin-top:1mm; padding-top:2mm;
+    font-weight:800; font-size:13.5px;
+  }
+  #printArea .r-footer{
+    text-align:center; font-size:12px; font-weight:700;
+    margin-top:4mm;
+  }
   @media print{
-    body *{ visibility:hidden; }
-    #printArea, #printArea *{ visibility:visible; }
-    #printArea{
-      display:block !important;
-      position:absolute; top:0; right:0; width:78mm;
-      font-family:'Vazirmatn', sans-serif; color:#000;
-      padding:6mm;
-    }
-    #printArea h2{ text-align:center; font-size:16px; margin:0 0 2mm; }
-    #printArea .p-time{ text-align:center; font-size:11px; color:#333; margin-bottom:2mm; }
-    #printArea .p-table{ text-align:center; font-size:14px; font-weight:700; margin-bottom:4mm; }
-    #printArea .p-row{
-      display:flex; justify-content:space-between; font-size:13px;
-      border-top:1px dashed #999; padding:2mm 0;
-    }
-    #printArea .p-row:first-of-type{ border-top:1px solid #000; }
-    #printArea .p-total{
-      border-top:1px solid #000; margin-top:2mm; padding-top:2mm;
-      display:flex; justify-content:space-between; font-weight:700; font-size:13.5px;
-    }
+    @page{ size:80mm auto; margin:0; }
+    body > *:not(#printArea){ display:none !important; }
+    #printArea{ display:block !important; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>کافیت — پیشخوان</h1>
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 9h13v5.5A4.5 4.5 0 0 1 12.5 19h-4A4.5 4.5 0 0 1 4 14.5V9Z" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M17 10.5h1.5a2.3 2.3 0 0 1 0 4.6H17" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8 4.5c-.6.7-.6 1.3 0 2s.6 1.3 0 2M12 4.5c-.6.7-.6 1.3 0 2s.6 1.3 0 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <h1>کافیت — پیشخوان</h1>
+  </div>
   <span class="live-dot">آنلاین</span>
   <span class="queue-badge" id="queueBadge">۰ سفارش</span>
+  <a class="history-link" href="history.html">
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 5.5v5l3.2 1.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3.5 8.5A6.5 6.5 0 1 1 4.3 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M3.2 5.3 3.5 8.5l3.1-.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    تاریخچه
+  </a>
 </header>
 
 <main>
-  <div class="hint-bar">
-    <span>برای چاپ سفارشِ بعدی (بالای صف) کلید <kbd>Enter</kbd> رو بزن</span>
-  </div>
   <div id="listWrap"></div>
 </main>
 
+<div class="print-next-bar">
+  <button class="print-next-btn" id="printNextBtn" disabled>
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5.5 7V3.6c0-.3.24-.6.6-.6h7.8c.36 0 .6.27.6.6V7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <rect x="3.5" y="7" width="13" height="6.2" rx="1.1" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M5.7 12.5h8.6V16c0 .3-.24.55-.55.55H6.25a.55.55 0 0 1-.55-.55v-3.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+    </svg>
+    <span id="printNextLabel">چاپ سفارش بعدی</span>
+    <kbd>Enter</kbd>
+  </button>
+</div>
+
 <!-- ============ Hidden printable receipt ============ -->
 <div id="printArea">
-  <h2>کافیت</h2>
-  <div class="p-time" id="pTime"></div>
-  <div class="p-table" id="pTable"></div>
-  <div id="pItems"></div>
-  <div class="p-total">
-    <span>تعداد اقلام</span>
-    <span id="pCount"></span>
+  <div class="r-brand">COFFIT</div>
+  <div class="r-address">نشانی: خیابان هراز، نبش آفتاب ۶۶</div>
+  <div class="r-divider"></div>
+  <div class="r-meta-row"><span>نام حساب: صندوق</span><span id="rDate"></span></div>
+  <div class="r-meta-row"><span>شماره فاکتور: <span id="rInvoice"></span></span><span id="rTime"></span></div>
+  <div class="r-meta-row"><span>شماره میز: <span id="rTable"></span></span><span id="rCustomer"></span></div>
+  <table class="r-table">
+    <thead>
+      <tr><th>ردیف</th><th>نام کالا</th><th>تعداد</th><th>نرخ فروشگاه</th><th>مبلغ کل</th></tr>
+    </thead>
+    <tbody id="rItems"></tbody>
+  </table>
+  <div class="r-summary">
+    <div class="r-summary-row"><span>جمع کل</span><span id="rSubtotal"></span></div>
+    <div class="r-summary-row"><span>تخفیف</span><span>۰</span></div>
+    <div class="r-summary-row"><span>ارزش افزوده</span><span>۰</span></div>
+    <div class="r-summary-row total"><span>قابل پرداخت</span><span id="rTotal"></span></div>
   </div>
+  <div class="r-footer">کافیت یادت نـــــــــــــــره</div>
 </div>
 
 <script type="module">
@@ -185,9 +327,42 @@
 
   const listWrap = document.getElementById('listWrap');
   const queueBadge = document.getElementById('queueBadge');
+  const printNextBtn = document.getElementById('printNextBtn');
+
+  printNextBtn.addEventListener('click', () => {
+    if (queue.length > 0) printOrder(queue[0]);
+  });
 
   const faDigits = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
   const itemCount = order => order.items.reduce((sum, it) => sum + it.qty, 0);
+
+  // مرورگرها ارتفاع "auto" رو برای کاغذ حرارتی درست حساب نمی‌کنن (معمولاً یه صفحه‌ی A4 خالی می‌سازن).
+  // برای همین دقیقاً قبل از چاپ، ارتفاع واقعی رسید رو اندازه می‌گیریم و کاغذ رو دقیقاً هم‌اندازه‌ش می‌کنیم.
+  // صبر برای آماده شدن فونت هم لازمه، وگرنه اندازه‌گیری با فونت جایگزین (کوتاه‌تر) انجام میشه و متن ته رسید به صفحه‌ی بعد می‌ره.
+  async function fitPrintPageToContent(){
+    if (document.fonts && document.fonts.ready){
+      try{ await document.fonts.ready; }catch(e){}
+    }
+    const el = document.getElementById('printArea');
+    const prev = { display: el.style.display, visibility: el.style.visibility, position: el.style.position, left: el.style.left };
+    el.style.display = 'block';
+    el.style.visibility = 'hidden';
+    el.style.position = 'fixed';
+    el.style.left = '-9999px';
+    const heightMM = Math.ceil(el.scrollHeight / 3.7795) + 10; // px→mm + حاشیه‌ی اطمینان سخاوتمندانه
+    el.style.display = prev.display;
+    el.style.visibility = prev.visibility;
+    el.style.position = prev.position;
+    el.style.left = prev.left;
+
+    let styleTag = document.getElementById('dynamicPageSize');
+    if (!styleTag){
+      styleTag = document.createElement('style');
+      styleTag.id = 'dynamicPageSize';
+      document.head.appendChild(styleTag);
+    }
+    styleTag.textContent = `@media print{ @page{ size:80mm ${heightMM}mm; margin:0; } }`;
+  }
 
   let queue = [];
   let knownIds = new Set();
@@ -222,10 +397,16 @@
 
   function render(){
     queueBadge.textContent = `${faDigits(queue.length)} سفارش`;
+    printNextBtn.disabled = queue.length === 0;
     if (queue.length === 0){
       listWrap.innerHTML = `
         <div class="empty-state">
-          <div class="emoji">☕</div>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="steam s1" d="M9 2.5c-.7.8-.7 1.5 0 2.3s.7 1.5 0 2.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <path class="steam s2" d="M13 2.5c-.7.8-.7 1.5 0 2.3s.7 1.5 0 2.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M4 10h13v5.2A4.8 4.8 0 0 1 12.2 20H8.8A4.8 4.8 0 0 1 4 15.2V10Z" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M17 11.5h1.4a2.4 2.4 0 0 1 0 4.8H17" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
           <p>منتظر سفارش جدید...</p>
         </div>`;
       return;
@@ -241,14 +422,25 @@
       return `
         <div class="order-card ${idx === 0 ? 'next' : ''}">
           <div class="order-top">
-            <span class="order-tag">${idx === 0 ? 'بعدی — Enter' : 'در صف'}</span>
+            <span class="order-tag">${idx === 0 ? 'سفارش بعدی' : 'در صف'}</span>
             <span class="order-time">${time}</span>
           </div>
-          ${order.table_number ? `<div class="order-table">میز ${faDigits(order.table_number)}</div>` : ''}
+          ${order.table_number || order.customer_name || order.customer_phone ? `<div>
+            ${order.table_number ? `<span class="order-table">میز ${faDigits(order.table_number)}</span>` : ''}
+            ${order.customer_name ? `<span class="order-name">به نام ${order.customer_name}</span>` : ''}
+            ${order.customer_phone ? `<a class="order-phone" href="tel:${order.customer_phone}">${order.customer_phone}</a>` : ''}
+          </div>` : ''}
           <div class="order-items">${rows}</div>
           <div class="order-foot">
             <span class="order-count">${faDigits(itemCount(order))} مورد</span>
-            <button class="print-btn" data-id="${order.id}">چاپ</button>
+            <button class="print-btn" data-id="${order.id}">
+              <svg class="print-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.5 7V3.6c0-.3.24-.6.6-.6h7.8c.36 0 .6.27.6.6V7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <rect x="3.5" y="7" width="13" height="6.2" rx="1.1" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M5.7 12.5h8.6V16c0 .3-.24.55-.55.55H6.25a.55.55 0 0 1-.55-.55v-3.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              </svg>
+              <span>چاپ</span>
+            </button>
           </div>
         </div>`;
     }).join('');
@@ -261,20 +453,34 @@
     });
   }
 
-  function printOrder(order){
+  async function printOrder(order){
     if (printing) return;
     printing = true;
 
-    document.getElementById('pTime').textContent = order.created_at
-      ? new Date(order.created_at).toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'})
-      : new Date().toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'});
+    const now = new Date();
+    document.getElementById('rDate').textContent = now.toLocaleDateString('fa-IR');
+    document.getElementById('rTime').textContent = now.toLocaleTimeString('fa-IR', {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('rInvoice').textContent = faDigits(order.id);
+    document.getElementById('rTable').textContent = order.table_number ? faDigits(order.table_number) : '—';
+    document.getElementById('rCustomer').textContent = [order.customer_name, order.customer_phone].filter(Boolean).join(' — ');
 
-    document.getElementById('pTable').textContent = order.table_number ? `میز ${faDigits(order.table_number)}` : '';
+    document.getElementById('rItems').innerHTML = order.items.map((it, idx) => {
+      const price = Number(it.price) || 0;
+      const lineTotal = price * it.qty;
+      return `<tr>
+        <td>${faDigits(idx + 1)}</td>
+        <td class="r-name">${it.name}</td>
+        <td>${faDigits(it.qty)} عدد</td>
+        <td>${price.toLocaleString('fa-IR')}</td>
+        <td>${lineTotal.toLocaleString('fa-IR')}</td>
+      </tr>`;
+    }).join('');
 
-    document.getElementById('pItems').innerHTML = order.items.map(it => `
-      <div class="p-row"><span>${faDigits(it.qty)}× ${it.name}</span></div>
-    `).join('');
-    document.getElementById('pCount').textContent = `${faDigits(itemCount(order))} مورد`;
+    const subtotal = order.items.reduce((sum, it) => sum + (Number(it.price) || 0) * it.qty, 0);
+    document.getElementById('rSubtotal').textContent = subtotal.toLocaleString('fa-IR');
+    document.getElementById('rTotal').textContent = subtotal.toLocaleString('fa-IR');
+
+    await fitPrintPageToContent();
 
     const finish = async () => {
       window.removeEventListener('afterprint', finish);
