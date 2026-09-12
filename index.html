@@ -530,6 +530,37 @@
     line-height:1.7;
   }
 
+  /* ---------- Table select ---------- */
+  .table-select{ margin-bottom:14px; }
+  .table-select-label{
+    font-size:12.5px; font-weight:700; color:var(--green-800);
+    margin-bottom:8px; display:block;
+  }
+  .table-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:8px;
+  }
+  .table-btn{
+    aspect-ratio:1;
+    border:1px solid var(--line);
+    background:var(--white);
+    color:var(--green-900);
+    border-radius:12px;
+    font-family:inherit;
+    font-size:14px;
+    font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .table-btn.selected{
+    background:var(--green-800);
+    border-color:var(--green-800);
+    color:#fff;
+  }
+  .checkout-btn:disabled{
+    opacity:.5;
+  }
+
   /* ---------- Product preview sheet ---------- */
   .preview-overlay{
     position:fixed; inset:0;
@@ -832,7 +863,11 @@
   </div>
   <div class="sheet-body" id="sheetBody"></div>
   <div class="sheet-foot" id="sheetFoot" style="display:none;">
-    <button class="checkout-btn" id="checkoutBtn">ثبت سفارش در کانتر</button>
+    <div class="table-select">
+      <span class="table-select-label">شماره میزت رو انتخاب کن</span>
+      <div class="table-grid" id="tableGrid"></div>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" disabled>ثبت سفارش در کانتر</button>
     <p class="checkout-hint">سفارش شما هنوز پرداخت نشده — این صفحه رو به صندوقدار نشون بده تا سفارشت آماده بشه.</p>
   </div>
 </div>
@@ -1331,6 +1366,26 @@ const cartSheet = document.getElementById('cartSheet');
 const sheetBody = document.getElementById('sheetBody');
 const sheetFoot = document.getElementById('sheetFoot');
 
+/* ---------- Table select ---------- */
+const TABLE_COUNT = 15;
+const tableGrid = document.getElementById('tableGrid');
+const checkoutBtn = document.getElementById('checkoutBtn');
+let selectedTable = null;
+
+for (let i = 1; i <= TABLE_COUNT; i++){
+  const btn = document.createElement('button');
+  btn.className = 'table-btn';
+  btn.type = 'button';
+  btn.textContent = fa(i);
+  btn.addEventListener('click', () => {
+    selectedTable = i;
+    tableGrid.querySelectorAll('.table-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    checkoutBtn.disabled = false;
+  });
+  tableGrid.appendChild(btn);
+}
+
 function openSheet(){
   renderSheet();
   sheetOverlay.classList.add('open');
@@ -1412,7 +1467,7 @@ function renderSheet(){
 const receiptOverlay = document.getElementById('receiptOverlay');
 const receiptItems = document.getElementById('receiptItems');
 
-function showReceipt(snapshot, count, total){
+function showReceipt(snapshot, count, total, table){
   receiptItems.innerHTML = '';
   snapshot.forEach(({item, qty})=>{
     const row = document.createElement('div');
@@ -1425,7 +1480,7 @@ function showReceipt(snapshot, count, total){
     `;
     receiptItems.appendChild(row);
   });
-  document.getElementById('receiptCount').textContent = `${fa(count)} مورد`;
+  document.getElementById('receiptCount').textContent = `${fa(count)} مورد — میز ${fa(table)}`;
   document.getElementById('receiptTime').textContent = new Date().toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'});
   receiptOverlay.classList.add('open');
 }
@@ -1447,14 +1502,19 @@ function clearCart(){
   renderSheet();
 }
 
-document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+checkoutBtn.addEventListener('click', async ()=>{
   if (Object.keys(cart).length === 0) return;
+  if (!selectedTable){
+    tableGrid.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
   const snapshot = Object.entries(cart).map(([id, qty]) => ({item: ITEM_INDEX[id], qty}));
   const {count, total} = cartTotals();
-  if (window.pushOrderToFirestore) window.pushOrderToFirestore(snapshot, count, total);
+  const table = selectedTable;
   closeSheet();
   clearCart();
-  showReceipt(snapshot, count, total);
+  showReceipt(snapshot, count, total, table);
+  if (window.pushOrderToFirestore) await window.pushOrderToFirestore(snapshot, count, total, table);
 });
 
 document.getElementById('receiptCloseBtn').addEventListener('click', closeReceipt);
@@ -1563,38 +1623,69 @@ menuBtn.addEventListener('click', ()=>{
 
 </script>
 
-<!-- ============ Firebase: fires each finalized order to the counter dashboard ============ -->
+<!-- ============ Supabase: fires each finalized order to the counter dashboard ============ -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-  // ⚠️ همین آبجکت رو توی counter.html هم عیناً کپی کن (باید هر دو فایل به یک پروژه‌ی Firebase وصل باشن)
-  const firebaseConfig = {
-    apiKey: "AIzaSyD6ow0JeBZLLZm39WDeA0zERWj8CEF53AU",
-    authDomain: "cafit-orders.firebaseapp.com",
-    projectId: "cafit-orders",
-    storageBucket: "cafit-orders.firebasestorage.app",
-    messagingSenderId: "365784225003",
-    appId: "1:365784225003:web:def17c0d08983e5e559aae"
-  };
+  // ⚠️ همین دو مقدار رو توی counter.html هم عیناً کپی کن (باید هر دو فایل به یک پروژه‌ی Supabase وصل باشن)
+  const SUPABASE_URL = 'https://rcaunkuwmpvywcogjyyn.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJjYXVua3V3bXB2eXdjb2dqeXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNTQwNTYsImV4cCI6MjEwNDczMDA1Nn0.y3J502x_3dfZfNs2ecmJiru8bpLZoNS3B8DBbXd14ZM';
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ---------- صف محلی برای سفارش‌هایی که لحظه‌ی ثبت، نت قطع بوده ----------
+  // برخلاف فایربیس، کلاینت سوپابیس خودش صف آفلاین نداره؛ این بخش همون کارو دستی انجام میده:
+  // اگه ارسال شکست بخوره، سفارش توی localStorage گوشیِ مشتری می‌مونه و هر چند ثانیه
+  // یه‌بار (و به‌محض وصل شدن اینترنت) دوباره امتحان می‌کنه، تا سفارش گم نشه.
+  const QUEUE_KEY = 'cafit_pending_orders';
+
+  function readQueue(){
+    try{ return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]'); }
+    catch(e){ return []; }
+  }
+  function writeQueue(q){
+    try{ localStorage.setItem(QUEUE_KEY, JSON.stringify(q)); }catch(e){}
+  }
+
+  async function sendOrder(row){
+    const { error } = await supabase.from('orders').insert(row);
+    return !error;
+  }
+
+  let flushing = false;
+  async function flushQueue(){
+    if (flushing) return;
+    flushing = true;
+    let q = readQueue();
+    const remaining = [];
+    for (const row of q){
+      const ok = await sendOrder(row);
+      if (!ok) remaining.push(row);
+    }
+    writeQueue(remaining);
+    flushing = false;
+  }
+
+  window.addEventListener('online', flushQueue);
+  setInterval(flushQueue, 20000);
+  flushQueue();
 
   // این تابع رو اسکریپت اصلی صدا می‌زنه (پایین‌تر همون window.pushOrderToFirestore)
-  window.pushOrderToFirestore = async function(snapshot, count, total){
-    try{
-      await addDoc(collection(db, "orders"), {
-        items: snapshot.map(({item, qty}) => ({ name: item.n, qty, price: item.p })),
-        count,
-        total,
-        printed: false,
-        createdAt: serverTimestamp()
-      });
-    }catch(err){
-      // اگه نت قطع باشه یا فایربیس تنظیم نشده باشه، سفارش لوکال (رسید روی گوشی مشتری) هنوز درست کار می‌کنه
-      console.warn('ثبت سفارش در فایربیس ناموفق بود:', err);
+  window.pushOrderToFirestore = async function(snapshot, count, total, table){
+    const row = {
+      table_number: table,
+      items: snapshot.map(({item, qty}) => ({ name: item.n, qty, price: item.p })),
+      total_price: String(total),
+      status: 'pending'
+    };
+    const ok = await sendOrder(row);
+    if (!ok){
+      const q = readQueue();
+      q.push(row);
+      writeQueue(q);
+      console.warn('ارسال سفارش ناموفق بود، توی صف محلی ذخیره شد.');
     }
+    return ok;
   };
 </script>
 </body>
