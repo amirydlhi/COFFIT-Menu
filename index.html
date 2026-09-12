@@ -417,7 +417,7 @@
     transform:translate(-50%, 100%);
     width:100%;
     max-width:480px;
-    max-height:78vh;
+    max-height:90vh;
     background:var(--cream);
     border-radius:26px 26px 0 0;
     z-index:61;
@@ -435,7 +435,7 @@
   }
   .sheet-head{
     display:flex; align-items:center; justify-content:space-between;
-    padding:6px 20px 14px;
+    padding:6px 20px 10px;
     border-bottom:1px solid var(--line);
   }
   .sheet-head h3{ font-size:17px; margin:0; color:var(--green-900); }
@@ -449,7 +449,7 @@
   .sheet-close svg{ width:14px; height:14px; }
   .sheet-body{
     overflow-y:auto;
-    padding:10px 20px 20px;
+    padding:8px 20px 10px;
     flex:1;
   }
   .sheet-empty{
@@ -500,7 +500,7 @@
   .stepper span{ font-size:12.5px; font-weight:700; min-width:14px; text-align:center; }
 
   .sheet-foot{
-    padding:14px 20px 24px;
+    padding:10px 20px 18px;
     border-top:1px solid var(--line);
   }
   .sheet-total-row{
@@ -518,7 +518,7 @@
     color:var(--white);
     border:none;
     border-radius:999px;
-    padding:15px;
+    padding:13px;
     font-size:14.5px;
     font-weight:700;
   }
@@ -531,18 +531,18 @@
   }
 
   /* ---------- Table select ---------- */
-  .table-select{ margin-bottom:14px; }
+  .table-select{ margin-bottom:10px; }
   .table-select-label{
     font-size:12.5px; font-weight:700; color:var(--green-800);
-    margin-bottom:8px; display:block;
+    margin-bottom:6px; display:block;
   }
   .table-grid{
     display:grid;
     grid-template-columns:repeat(5, 1fr);
-    gap:8px;
+    gap:6px;
   }
   .table-btn{
-    aspect-ratio:1;
+    height:38px;
     border:1px solid var(--line);
     background:var(--white);
     color:var(--green-900);
@@ -560,6 +560,52 @@
   .checkout-btn:disabled{
     opacity:.5;
   }
+
+  /* ---------- Sheet back button ---------- */
+  .sheet-back{
+    width:32px; height:32px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .sheet-back svg{ width:15px; height:15px; color:var(--green-900); }
+  .sheet-head h3{ flex:1; }
+
+  /* ---------- Customer name field ---------- */
+  .name-field{ margin-top:10px; }
+  .name-field-label{
+    font-size:12px; font-weight:700; color:var(--green-800);
+    margin-bottom:5px; display:block;
+  }
+  .name-input{
+    width:100%;
+    border:1px solid var(--line);
+    background:var(--white);
+    color:var(--green-900);
+    border-radius:var(--radius-sm);
+    padding:11px 12px;
+    font-family:inherit;
+    font-size:13.5px;
+  }
+  .name-input::placeholder{ color:var(--muted); }
+  .name-input:focus{ outline:none; border-color:var(--green-500); }
+  .name-input.invalid, .table-grid.invalid .table-btn{ border-color:#C0473C; }
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed; left:50%; bottom:26px;
+    transform:translate(-50%, 20px);
+    background:var(--green-900); color:#fff;
+    font-size:13.5px; font-weight:600;
+    padding:12px 20px; border-radius:999px;
+    box-shadow:0 10px 24px -8px rgba(0,0,0,.4);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+    z-index:99; max-width:88%; text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%, 0); }
 
   /* ---------- Product preview sheet ---------- */
   .preview-overlay{
@@ -830,7 +876,7 @@
 
   <div class="intro">
     <p class="brand-title">کافیت</p>
-    <p class="intro-text">سلام! از دسته‌بندی‌ها انتخاب کن و نوشیدنی خودتو به سبد اضافه کن — سفارشت رو موقع رسیدن به کانتر نشون بده. <strong>نوش جان ☕</strong></p>
+    <p class="intro-text">سلام! از دسته‌بندی‌ها انتخاب کن و نوشیدنی خودتو به سبد اضافه کن. <strong>نوش جان ☕</strong></p>
   </div>
 
   <div class="category-rail-wrap">
@@ -856,19 +902,17 @@
 <div class="sheet" id="cartSheet">
   <div class="sheet-handle"></div>
   <div class="sheet-head">
-    <h3>سبد سفارش</h3>
+    <button class="sheet-back" id="sheetBackBtn" aria-label="بازگشت" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg>
+    </button>
+    <h3 id="sheetTitle">سبد سفارش</h3>
     <button class="sheet-close" id="sheetCloseBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
   </div>
   <div class="sheet-body" id="sheetBody"></div>
   <div class="sheet-foot" id="sheetFoot" style="display:none;">
-    <div class="table-select">
-      <span class="table-select-label">شماره میزت رو انتخاب کن</span>
-      <div class="table-grid" id="tableGrid"></div>
-    </div>
-    <button class="checkout-btn" id="checkoutBtn" disabled>ثبت سفارش در کانتر</button>
-    <p class="checkout-hint">سفارش شما هنوز پرداخت نشده — این صفحه رو به صندوقدار نشون بده تا سفارشت آماده بشه.</p>
+    <button class="checkout-btn" id="checkoutBtn" disabled>مرحله بعد</button>
   </div>
 </div>
 
@@ -916,13 +960,15 @@
       <div id="receiptItems"></div>
       <div class="receipt-divider"></div>
       <div class="receipt-count-row"><span>تعداد اقلام</span><span id="receiptCount">۰ مورد</span></div>
-      <p class="receipt-hint">این صفحه رو به صندوقدار نشون بده تا آماده‌سازی سفارشت شروع بشه.</p>
+      <p class="receipt-hint" id="receiptHint">سفارشت مستقیم برای کانتر ارسال شد؛ به محض آماده شدن صدات می‌کنیم.</p>
     </div>
   </div>
   <div class="receipt-foot">
     <button class="receipt-new-btn" id="receiptNewBtn">باشه، متوجه شدم</button>
   </div>
 </div>
+
+<div class="toast" id="appToast"></div>
 
 <script>
 /* ============ Icon library (paper-cup marks in the brand style) ============ */
@@ -1305,6 +1351,41 @@ MENU.forEach(cat => cat.items.forEach((item, idx) => {
   ITEM_INDEX[id] = {...item, catFa:cat.nameFa, icon:cat.icon};
 }));
 
+/* ============ Toast (validation popup) ============ */
+const appToast = document.getElementById('appToast');
+let toastTimer = null;
+function showToast(message){
+  appToast.textContent = message;
+  appToast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> appToast.classList.remove('show'), 2400);
+}
+
+/* ============ Overlay scroll lock ============ */
+/* جلوگیری از اسکرول‌خوردن پس‌زمینه وقتی یه شیت/اورلی بازه (مثل سبد، پیش‌نمایش، رسید، جستجو) */
+const openOverlays = new Set();
+let lockedScrollY = 0;
+function lockOverlay(name){
+  if (openOverlays.size === 0){
+    lockedScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${lockedScrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+  }
+  openOverlays.add(name);
+}
+function unlockOverlay(name){
+  openOverlays.delete(name);
+  if (openOverlays.size === 0){
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    window.scrollTo(0, lockedScrollY);
+  }
+}
+
 /* ============ Cart logic ============ */
 const cartBar = document.getElementById('cartBar');
 const cartBarBadge = document.getElementById('cartBarBadge');
@@ -1365,39 +1446,36 @@ const sheetOverlay = document.getElementById('sheetOverlay');
 const cartSheet = document.getElementById('cartSheet');
 const sheetBody = document.getElementById('sheetBody');
 const sheetFoot = document.getElementById('sheetFoot');
-
-/* ---------- Table select ---------- */
-const TABLE_COUNT = 15;
-const tableGrid = document.getElementById('tableGrid');
+const sheetTitle = document.getElementById('sheetTitle');
+const sheetBackBtn = document.getElementById('sheetBackBtn');
 const checkoutBtn = document.getElementById('checkoutBtn');
-let selectedTable = null;
 
-for (let i = 1; i <= TABLE_COUNT; i++){
-  const btn = document.createElement('button');
-  btn.className = 'table-btn';
-  btn.type = 'button';
-  btn.textContent = fa(i);
-  btn.addEventListener('click', () => {
-    selectedTable = i;
-    tableGrid.querySelectorAll('.table-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    checkoutBtn.disabled = false;
-  });
-  tableGrid.appendChild(btn);
-}
+/* ---------- Table + name + phone step ---------- */
+const TABLE_COUNT = 15;
+let selectedTable = null;
+let customerName = '';
+let customerPhone = '';
+let sheetStep = 'cart'; // 'cart' -> review items, 'table' -> pick table + name + phone
 
 function openSheet(){
+  sheetStep = 'cart';
   renderSheet();
   sheetOverlay.classList.add('open');
   cartSheet.classList.add('open');
+  lockOverlay('cart');
 }
 function closeSheet(){
   sheetOverlay.classList.remove('open');
   cartSheet.classList.remove('open');
+  unlockOverlay('cart');
 }
 cartBar.addEventListener('click', openSheet);
 document.getElementById('sheetCloseBtn').addEventListener('click', closeSheet);
 sheetOverlay.addEventListener('click', closeSheet);
+sheetBackBtn.addEventListener('click', () => {
+  sheetStep = 'cart';
+  renderSheet();
+});
 
 /* ============ Product preview sheet ============ */
 const previewOverlay = document.getElementById('previewOverlay');
@@ -1423,10 +1501,12 @@ function openPreview(id, item, cat){
   });
   previewOverlay.classList.add('open');
   previewSheet.classList.add('open');
+  lockOverlay('preview');
 }
 function closePreview(){
   previewOverlay.classList.remove('open');
   previewSheet.classList.remove('open');
+  unlockOverlay('preview');
 }
 previewOverlay.addEventListener('click', closePreview);
 previewSheet.addEventListener('click', (e) => {
@@ -1435,6 +1515,63 @@ previewSheet.addEventListener('click', (e) => {
 
 function renderSheet(){
   const entries = Object.entries(cart);
+
+  if (sheetStep === 'table'){
+    sheetTitle.textContent = 'انتخاب میز';
+    sheetBackBtn.style.display = 'flex';
+    sheetFoot.style.display = 'block';
+
+    sheetBody.innerHTML = `
+      <div class="table-select">
+        <span class="table-select-label">شماره میزت رو انتخاب کن</span>
+        <div class="table-grid" id="tableGrid"></div>
+      </div>
+      <div class="name-field">
+        <span class="name-field-label">اسمت</span>
+        <input type="text" class="name-input" id="customerNameInput" placeholder="مثلاً: امیررضا" value="${customerName}">
+      </div>
+      <div class="name-field">
+        <span class="name-field-label">شماره تماس</span>
+        <input type="tel" inputmode="tel" class="name-input" id="customerPhoneInput" placeholder="09xxxxxxxxx" value="${customerPhone}">
+      </div>
+    `;
+
+    const tableGrid = document.getElementById('tableGrid');
+    for (let i = 1; i <= TABLE_COUNT; i++){
+      const btn = document.createElement('button');
+      btn.className = 'table-btn' + (selectedTable === i ? ' selected' : '');
+      btn.type = 'button';
+      btn.textContent = fa(i);
+      btn.addEventListener('click', () => {
+        selectedTable = i;
+        tableGrid.querySelectorAll('.table-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        tableGrid.classList.remove('invalid');
+      });
+      tableGrid.appendChild(btn);
+    }
+
+    const nameInput = document.getElementById('customerNameInput');
+    nameInput.addEventListener('input', (e) => {
+      customerName = e.target.value;
+      if (customerName.trim()) nameInput.classList.remove('invalid');
+    });
+
+    const phoneInput = document.getElementById('customerPhoneInput');
+    phoneInput.addEventListener('input', (e) => {
+      customerPhone = e.target.value;
+      if (isValidIranPhone(customerPhone)) phoneInput.classList.remove('invalid');
+    });
+
+    checkoutBtn.textContent = 'ثبت سفارش در کانتر';
+    checkoutBtn.disabled = false;
+    checkoutBtn.onclick = submitOrder;
+    return;
+  }
+
+  sheetTitle.textContent = 'سبد سفارش';
+  sheetBackBtn.style.display = 'none';
+
   if(entries.length === 0){
     sheetBody.innerHTML = `<p class="sheet-empty">سبد سفارشت هنوز خالیه — از منو یه چیزی انتخاب کن ☕</p>`;
     sheetFoot.style.display = 'none';
@@ -1461,13 +1598,20 @@ function renderSheet(){
     row.querySelector('.dec').addEventListener('click', ()=> setQty(id, qty-1));
     sheetBody.appendChild(row);
   });
+
+  checkoutBtn.textContent = 'مرحله بعد';
+  checkoutBtn.disabled = false;
+  checkoutBtn.onclick = () => {
+    sheetStep = 'table';
+    renderSheet();
+  };
 }
 
 /* ============ Receipt screen ============ */
 const receiptOverlay = document.getElementById('receiptOverlay');
 const receiptItems = document.getElementById('receiptItems');
 
-function showReceipt(snapshot, count, total, table){
+function showReceipt(snapshot, count, total, table, name){
   receiptItems.innerHTML = '';
   snapshot.forEach(({item, qty})=>{
     const row = document.createElement('div');
@@ -1480,13 +1624,17 @@ function showReceipt(snapshot, count, total, table){
     `;
     receiptItems.appendChild(row);
   });
-  document.getElementById('receiptCount').textContent = `${fa(count)} مورد — میز ${fa(table)}`;
+  document.getElementById('receiptCount').textContent = name
+    ? `${fa(count)} مورد — میز ${fa(table)} — به نام ${name}`
+    : `${fa(count)} مورد — میز ${fa(table)}`;
   document.getElementById('receiptTime').textContent = new Date().toLocaleString('fa-IR', {hour:'2-digit', minute:'2-digit'});
   receiptOverlay.classList.add('open');
+  lockOverlay('receipt');
 }
 
 function closeReceipt(){
   receiptOverlay.classList.remove('open');
+  unlockOverlay('receipt');
 }
 
 function clearCart(){
@@ -1502,20 +1650,62 @@ function clearCart(){
   renderSheet();
 }
 
-checkoutBtn.addEventListener('click', async ()=>{
+/* شماره موبایل ایران: باید ۱۱ رقمی و با ۰۹ شروع بشه، و همه‌ی ارقام یکسان نباشه (مثل ۰۹۱۱۱۱۱۱۱۱۱) */
+function normalizeIranPhone(raw){
+  let digits = String(raw).replace(/[^\d۰-۹]/g, '');
+  digits = digits.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+  if (digits.startsWith('0098')) digits = '0' + digits.slice(4);
+  else if (digits.startsWith('98') && digits.length === 12) digits = '0' + digits.slice(2);
+  else if (digits.startsWith('9') && digits.length === 10) digits = '0' + digits;
+  return digits;
+}
+function isValidIranPhone(raw){
+  const digits = normalizeIranPhone(raw);
+  if (!/^09\d{9}$/.test(digits)) return false;
+  if (/^(\d)\1{10}$/.test(digits)) return false;
+  return true;
+}
+
+async function submitOrder(){
   if (Object.keys(cart).length === 0) return;
-  if (!selectedTable){
-    tableGrid.scrollIntoView({behavior:'smooth', block:'center'});
+
+  const nameInput = document.getElementById('customerNameInput');
+  const phoneInput = document.getElementById('customerPhoneInput');
+  const tableGridEl = document.getElementById('tableGrid');
+  const name = customerName.trim();
+  const phone = normalizeIranPhone(customerPhone);
+
+  if (!name){
+    showToast('لطفاً اسمت رو وارد کن');
+    nameInput?.classList.add('invalid');
+    nameInput?.focus();
     return;
   }
+  if (!isValidIranPhone(customerPhone)){
+    showToast('شماره موبایلت درست نیست — باید ۱۱ رقم و با ۰۹ شروع بشه');
+    phoneInput?.classList.add('invalid');
+    phoneInput?.focus();
+    return;
+  }
+  if (!selectedTable){
+    showToast('لطفاً شماره میزت رو انتخاب کن');
+    tableGridEl?.classList.add('invalid');
+    tableGridEl?.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
   const snapshot = Object.entries(cart).map(([id, qty]) => ({item: ITEM_INDEX[id], qty}));
   const {count, total} = cartTotals();
   const table = selectedTable;
+  sheetStep = 'cart';
+  selectedTable = null;
+  customerName = '';
+  customerPhone = '';
   closeSheet();
   clearCart();
-  showReceipt(snapshot, count, total, table);
-  if (window.pushOrderToFirestore) await window.pushOrderToFirestore(snapshot, count, total, table);
-});
+  showReceipt(snapshot, count, total, table, name);
+  if (window.pushOrderToFirestore) await window.pushOrderToFirestore(snapshot, count, total, table, name, phone);
+}
 
 document.getElementById('receiptCloseBtn').addEventListener('click', closeReceipt);
 document.getElementById('receiptNewBtn').addEventListener('click', ()=>{
@@ -1550,10 +1740,12 @@ const searchResults = document.getElementById('searchResults');
 
 document.getElementById('searchOpenBtn').addEventListener('click', ()=>{
   searchOverlay.classList.add('open');
+  lockOverlay('search');
   setTimeout(()=> searchInput.focus(), 250);
 });
 document.getElementById('searchCloseBtn').addEventListener('click', ()=>{
   searchOverlay.classList.remove('open');
+  unlockOverlay('search');
   searchInput.value = '';
   searchResults.innerHTML = `<p class="search-hint">اسم نوشیدنی، مثل «لاته» یا «موکا» رو تایپ کن…</p>`;
 });
@@ -1584,6 +1776,7 @@ searchInput.addEventListener('input', ()=>{
     `;
     row.addEventListener('click', ()=>{
       searchOverlay.classList.remove('open');
+      unlockOverlay('search');
       const catId = id.split('-').slice(0,-1).join('-');
       document.getElementById(`sec-${catId}`).scrollIntoView({behavior:'smooth', block:'start'});
       const cardEl = document.querySelector(`.card[data-id="${id}"]`);
@@ -1671,9 +1864,11 @@ menuBtn.addEventListener('click', ()=>{
   flushQueue();
 
   // این تابع رو اسکریپت اصلی صدا می‌زنه (پایین‌تر همون window.pushOrderToFirestore)
-  window.pushOrderToFirestore = async function(snapshot, count, total, table){
+  window.pushOrderToFirestore = async function(snapshot, count, total, table, customerName, customerPhone){
     const row = {
       table_number: table,
+      customer_name: customerName || null,
+      customer_phone: customerPhone || null,
       items: snapshot.map(({item, qty}) => ({ name: item.n, qty, price: item.p })),
       total_price: String(total),
       status: 'pending'
